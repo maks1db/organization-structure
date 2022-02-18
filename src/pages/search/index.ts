@@ -1,7 +1,1 @@
-import { route } from './model';
-import { Page } from './SearchPage';
-
-export const SearchPage = {
-  route,
-  Page,
-};
+export { Page as SearchPage } from './SearchPage';

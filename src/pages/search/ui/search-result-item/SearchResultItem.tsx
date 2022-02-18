@@ -1,12 +1,15 @@
-import { FC } from 'react';
-import { User as UserIcon, List as ListIcon } from '@abdt/icons';
+import { List as ListIcon, User as UserIcon } from '@abdt/icons';
 import { Typography } from '@abdt/ornament';
-import { EntityType } from 'shared/types/entity';
 import { IconProps } from '@material-ui/core';
+import { FC } from 'react';
+import { EntityType } from 'shared/types/entity';
 
-interface ItemProps {
+import styles from './SearchResultItem.module.scss';
+
+interface ResultItemProps {
   title: string;
   description: string;
+  type: EntityType;
 }
 
 const Icons = {
@@ -15,28 +18,28 @@ const Icons = {
   team: ListIcon,
 } as Record<EntityType, FC<IconProps>>;
 
-const BaseItem: FC<ItemProps & { type: EntityType }> = ({
+export const SearchResultItem: FC<ResultItemProps> = ({
   title,
   description,
   type,
 }) => {
   const Icon = Icons[type];
   return (
-    <div className="flex px-4 py-2 items-center cursor-pointer hover:bg-abdt-blue100 relative">
+    <div className={styles.item}>
       <div>
         <Icon className="mr-6 absolute top-2" />
       </div>
       <div className="flex flex-col relative left-10">
         <Typography
           variant="body1"
-          component="div"
+          component="span"
           className="font-medium text-abdt-gray850"
         >
           {title}
         </Typography>
         <Typography
           variant="caption"
-          component="div"
+          component="span"
           className="font-medium text-abdt-gray500"
         >
           {description}
@@ -44,13 +47,4 @@ const BaseItem: FC<ItemProps & { type: EntityType }> = ({
       </div>
     </div>
   );
-};
-
-const User: FC<ItemProps> = props => <BaseItem {...props} type="employee" />;
-
-const Art: FC<ItemProps> = props => <BaseItem {...props} type="art" />;
-
-export const Result = {
-  User,
-  Art,
 };

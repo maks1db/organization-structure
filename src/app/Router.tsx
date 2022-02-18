@@ -6,10 +6,12 @@ import { ArtPage } from 'pages/art';
 import { SearchPage } from 'pages/search';
 import { UploadPage } from 'pages/upload';
 
+import * as routing from 'features/routing';
+
 const routes = [
-  { path: '/', route: SearchPage.route },
-  { path: '/art/:id', route: ArtPage.route },
-  { path: '/upload', route: UploadPage.route },
+  { path: '/', route: routing.search },
+  { path: '/art/:id', route: routing.art },
+  { path: '/upload', route: routing.upload },
 ];
 
 const router = createHistoryRouter({
@@ -21,8 +23,8 @@ router.setHistory(history);
 
 export const Router = () => (
   <RouterProvider router={router}>
-    <Route route={SearchPage.route} view={SearchPage.Page} />
-    <Route route={ArtPage.route} view={ArtPage.Page} />
-    <Route route={UploadPage.route} view={UploadPage.Page} />
+    <Route route={routing.search} view={SearchPage} />
+    <Route route={routing.art} view={ArtPage} />
+    <Route route={routing.upload} view={UploadPage} />
   </RouterProvider>
 );

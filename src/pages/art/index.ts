@@ -1,7 +1,1 @@
-import { route } from './model';
-import { Page } from './ui/ArtPage';
-
-export const ArtPage = {
-  route,
-  Page,
-};
+export { Page as ArtPage } from './ui/ArtPage';
