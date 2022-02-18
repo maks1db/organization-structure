@@ -1,8 +1,4 @@
 import { render } from 'react-dom';
+import { App } from './application';
 
-import styles from './style.module.scss'
-
-render(
-    <h1 className={styles.info}>App ready</h1>,
-    document.getElementById('root'),
-);
+render(<App />, document.getElementById('root'));
