@@ -2,7 +2,7 @@ const { colors } = require('@abdt/design-tokens');
 
 module.exports = {
   purge: {
-    enabled: false,
+    enabled: true,
     content: ['./src/**/*.tsx'],
   },
   darkMode: false, // or 'media' or 'class'
