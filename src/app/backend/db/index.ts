@@ -10,7 +10,7 @@ const { log, error } = console;
 
 export const connect = () => {
   mongoose.connect(connectionString).then(() => {
-    log('Connect to database...');
+    log('Connected to database...');
   });
 };
 export const disconnect = () => {

@@ -10,7 +10,8 @@
     "server": "json-server utils/mock/index.js --no-cors --port 3100",
     "test": "jest",
     "typecheck": "tsc --project tsconfig.json",
-    "server:dev": "NODE_ENV=development nodemon"
+    "server:dev": "NODE_ENV=development nodemon",
+    "server:dev:db": "docker run  -d -p 27017:27017 -v $(pwd)/mongo-db:/data/db mongo" 
   },
   "repository": {
     "type": "git",
