@@ -1,6 +1,6 @@
 import { Typography } from '@abdt/ornament';
 import { parseDateHours } from 'shared/lib/date';
-import { UploadButton } from 'features/upload-xlsx';
+import { UploadButton } from './UploadButton';
 
 export const Page = () => (
   <>

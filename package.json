@@ -18,6 +18,7 @@
     "url": "git+https://github.com/maks1db/organization-structure.git"
   },
   "dependencies": {
+    "axios": "~0.26.0",
     "@abdt/avatars": "~0.0.4",
     "@abdt/design-tokens": "~0.0.11",
     "@abdt/fonts": "~0.0.3",

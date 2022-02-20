@@ -2,7 +2,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 import { PORT } from 'shared/constants';
-import * as db from './db';
+import * as db from './backend/db';
+import { router } from './backend/routes/v1';
 
 const app = express();
 
@@ -18,7 +19,8 @@ app.use(bodyParser.json());
 //   express.static(path.join(__dirname, '../../../public/assets'))
 // );
 
-app.get('/test', (req, res) => res.json({ msg: 'wow' }));
+app.get('/test', (_, res) => res.json({ msg: 'wow' }));
+app.use('/api', router);
 
 if (process.env.NODE_ENV === 'development') {
   app.use((req, res, next) => {

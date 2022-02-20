@@ -49,3 +49,8 @@ const artScheme = new mongoose.Schema<ArtType>({
 });
 
 export const Art = mongoose.model('Art', artScheme);
+
+export const UploadDate = mongoose.model(
+  'UploadDate',
+  new mongoose.Schema<{ date: string }>({ date: String })
+);
