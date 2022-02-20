@@ -1,6 +1,6 @@
 import { Configuration } from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-// import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import fs from 'fs';
 
 const dir = process.cwd();
@@ -30,7 +30,7 @@ export default {
       template: 'src/app/template/index.html',
       filename: 'index.html',
     }),
-    // new ForkTsCheckerWebpackPlugin(),
+    new ForkTsCheckerWebpackPlugin(),
   ],
   module: {
     rules: [
