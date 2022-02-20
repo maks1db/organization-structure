@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 import { PORT } from 'shared/constants';
+import * as db from './db';
 
 const app = express();
 
@@ -43,7 +44,7 @@ if (process.env.NODE_ENV === 'development') {
 //   res.sendFile(path.resolve(__dirname, '../../public/', 'index.html'));
 // });
 
-// db.connect();
+db.connect();
 app.listen(PORT, () =>
   console.log(`Server organization-structure running on ${PORT}`)
 );
