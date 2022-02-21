@@ -1,7 +1,7 @@
 import { createStore, createEffect, createEvent } from 'effector';
 import { MessageProps } from '@abdt/ornament';
 
-const TIMEOUT_MESSAGE = 6000;
+const TIMEOUT_VISIBLE_MESSAGE = 6000;
 
 type MessageType = {
   id: number;
@@ -23,7 +23,7 @@ export const showAppMessage = (
   createEffect(() => {
     const id = new Date().valueOf();
 
-    setTimeout(() => deleteMsg(id), TIMEOUT_MESSAGE);
+    setTimeout(() => deleteMsg(id), TIMEOUT_VISIBLE_MESSAGE);
     addMsg({
       id,
       message,

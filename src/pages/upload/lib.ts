@@ -1,1 +1,1 @@
-export const isExcel = (name: string) => name.includes('xlsx');
+export const isExcel = (name: string) => name.includes('.xlsx');
