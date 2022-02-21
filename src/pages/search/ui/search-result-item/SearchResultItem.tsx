@@ -2,7 +2,7 @@ import { List as ListIcon, User as UserIcon } from '@abdt/icons';
 import { Typography } from '@abdt/ornament';
 import { IconProps } from '@material-ui/core';
 import { FC } from 'react';
-import { EntityType } from 'shared/types/entity';
+import { EntityType } from 'shared/types/api';
 
 import styles from './SearchResultItem.module.scss';
 

@@ -2,6 +2,7 @@ import { createEffect, createEvent, sample, split } from 'effector';
 import { showAppMessage } from 'features/show-message';
 import { path } from 'ramda';
 import { uploadXlsx } from 'shared/api/upload';
+import { getLastUploadDate } from 'widgets/last-update';
 
 import { isExcel } from './lib';
 
@@ -25,4 +26,9 @@ sample({
   clock: uploadFileFx.failData,
   fn: data => path(['response', 'data'], data),
   target: showAppMessage('danger'),
+});
+
+sample({
+  clock: uploadFileFx.done,
+  target: getLastUploadDate,
 });

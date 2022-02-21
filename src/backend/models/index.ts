@@ -21,6 +21,9 @@ const employeeScheme = new mongoose.Schema<EmployeeType>({
     telegram: String,
     email: String,
   },
+  workType: String,
+  serviceId: String,
+  statInitiative: String,
 });
 export const Employee = mongoose.model('Employee', employeeScheme);
 

@@ -1,7 +1,10 @@
+import { CircularProgress } from '@abdt/ornament';
 import { LastUpdate } from 'widgets/last-update';
 import { Logo } from './ui/Icons';
 import { SearchResultItem } from './ui/search-result-item';
 import { SearchInput } from './ui/search-input';
+
+import './model';
 
 export const Page = () => (
   <>
@@ -21,6 +24,9 @@ export const Page = () => (
         description="Команд: 10; Сотрудников: 20"
         type="art"
       />
+    </div>
+    <div className="mt-6">
+      <CircularProgress size={50} />
     </div>
   </>
 );

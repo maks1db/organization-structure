@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+export type EntityType = 'employee' | 'art' | 'team';
 
 export type PositionType = {
   _id: string;
@@ -11,6 +12,9 @@ export type EmployeeType = {
     name: string;
     _id: string;
   };
+  workType: string;
+  serviceId?: string;
+  statInitiative?: string;
   meta?: {
     telegram?: string;
     email?: string;
@@ -44,12 +48,24 @@ export type ArtType = {
   }[];
   teams: TeamType[];
   employees: {
-    employee: EmployeeType;
+    employee?: EmployeeType;
     team?: TeamType;
-    position: PositionType;
+    position?: PositionType;
     color?: string;
     font?: FontType;
     rate?: string;
   }[];
   unassignedEmployees: EmployeeType[];
+};
+
+export type SearchParams = {
+  search: string;
+  skip: number;
+};
+
+export type SearchResult = {
+  title: string;
+  id: string;
+  description: string;
+  type: EntityType;
 };

@@ -1,2 +1,2 @@
 export { LastUpdate } from './ui/LastUpdate';
-export { $lastUploadDate } from './model';
+export { $lastUploadDate, getLastUploadDate } from './model';

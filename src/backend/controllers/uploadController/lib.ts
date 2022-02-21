@@ -1,4 +1,5 @@
 import xlsx, { WorkSheet } from 'node-xlsx';
+import { Response } from 'express';
 
 const LIST_NAME = 'сотрудники';
 const BEGIN_DATA_ROW = 5;
@@ -37,11 +38,8 @@ const getFrom = (data: unknown[]) => {
 
 export const prepareEmployees = (worksheets: unknown[][]) => {
   return worksheets
+    .filter((_, ind) => ind >= BEGIN_DATA_ROW)
     .map((data, ind) => {
-      if (ind < BEGIN_DATA_ROW) {
-        return null;
-      }
-
       const getFromData = getFrom(data);
 
       return {
@@ -51,7 +49,18 @@ export const prepareEmployees = (worksheets: unknown[][]) => {
         team: getFromData('d'),
         position: getFromData('h'),
         statInitiative: getFromData('e'),
+        serviceId: ind.toString(),
       };
-    })
-    .filter(x => x !== null);
+    });
 };
+
+export const isError =
+  (res: Response) =>
+  <T>(data: T | Error) => {
+    if (data instanceof Error) {
+      res.status(500).send(data.message);
+      return true;
+    }
+
+    return false;
+  };
