@@ -31,7 +31,7 @@ const getFrom = (data: unknown[]) => {
   return (column: string) => {
     const typedData = data as string[];
     const ind = names[column];
-    return typedData[ind].trim();
+    return typedData[ind]?.trim();
   };
 };
 

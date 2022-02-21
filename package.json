@@ -10,7 +10,7 @@
     "server": "json-server utils/mock/index.js --no-cors --port 3100",
     "test": "jest",
     "typecheck": "tsc --project tsconfig.json",
-    "server:dev": "nodemon --inspect ./src/backend/controllers/uploadController.ts",
+    "server:dev": "nodemon",
     "server:dev:db": "docker run  -d -p 27017:27017 -v $(pwd)/mongo-db:/data/db mongo" 
   },
   "repository": {
