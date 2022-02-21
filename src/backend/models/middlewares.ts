@@ -80,7 +80,7 @@ export const postSaveArt = async (
       name: team.name,
       description: `Сотрудников: ${
         employeesTeams.filter(([, id]) => id === teamId).length
-      }`,
+      }; Арт: ${item.name}`,
       entityId: team._id,
       type: entityTypes.team,
     });
