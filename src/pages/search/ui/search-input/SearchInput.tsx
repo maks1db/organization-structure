@@ -14,7 +14,7 @@ export const SearchInput: FC = () => {
       size="small"
       className="w-6/12"
       value={search}
-      onChange={e => setSearchValue(e.target.value)}
+      onChange={e => setSearchValue(e.target.value.trim())}
       InputProps={{
         endAdornment: (
           <InputAdornment position="end" className="cursor-pointer">

@@ -1,14 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { RequestHandler } from 'express';
-import { Art, Employee } from 'backend/models';
+import { SearchResultItem } from 'backend/models';
+import { omit } from 'ramda';
 
-export const searchEntities: RequestHandler = (req, res) => {
-  const { query, skip } = req.query;
+export const searchEntities: RequestHandler = async (req, res) => {
+  const { search, skip } = req.query;
 
-  const arts = Art.find({ name: { $regex: query, $options: 'i' } });
-  const employees = Employee.find({ name: { $regex: query, $options: 'i' } });
-  const teams = Art.find({ 'teams.name': { $regex: query, $options: 'i' } });
+  const result = await SearchResultItem.find({
+    name: new RegExp(search as string, 'i'),
+  })
+    .skip(parseInt(skip as string, 10))
+    .lean();
 
-  res.send(200).json({
-    result: 'ok',
+  res.json({
+    result: result.map(omit(['_id', '__v'])),
   });
 };

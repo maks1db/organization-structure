@@ -3,28 +3,32 @@ import { SearchResult } from 'shared/types/api';
 import * as api from 'shared/api/search';
 
 import { sample, createEffect } from 'effector';
-import { always } from 'ramda';
+import { always, path } from 'ramda';
 import { searchValueUpdated } from './ui/search-input/model';
-
-searchValueUpdated.watch(s => console.log('query', s));
 
 export const searchFx = createEffect(api.search);
 
-export const [$searchResults, setSearchResults] = createBaseStore<
-  SearchResult[]
->([]);
+export const [$searchResult, setSearchResult] = createBaseStore<SearchResult[]>(
+  []
+);
 
 sample({
   clock: searchValueUpdated,
-  source: $searchResults,
-  filter: (_, clock) => clock !== '',
-  fn: (source, clock) => ({ search: clock, skip: source.length }),
+  source: $searchResult,
+  filter: (_, clock) => clock?.length > 0,
+  fn: (_, clock) => ({ search: clock, skip: 0 }),
   target: searchFx,
 });
 
 sample({
   clock: searchValueUpdated,
-  filter: clock => clock === '',
+  filter: clock => clock?.length === 0,
   fn: always([]),
-  target: setSearchResults,
+  target: setSearchResult,
+});
+
+sample({
+  clock: searchFx.doneData,
+  fn: data => path(['data', 'result'], data),
+  target: setSearchResult,
 });

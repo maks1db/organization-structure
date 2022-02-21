@@ -48,6 +48,7 @@ export type ArtType = {
   }[];
   teams: TeamType[];
   employees: {
+    _id: string;
     employee?: EmployeeType;
     team?: TeamType;
     position?: PositionType;
@@ -64,8 +65,8 @@ export type SearchParams = {
 };
 
 export type SearchResult = {
-  title: string;
-  id: string;
+  name: string;
+  entityId: string;
   description: string;
   type: EntityType;
 };

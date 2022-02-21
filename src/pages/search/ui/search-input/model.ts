@@ -13,7 +13,7 @@ const updateQueryFx = createEffect((value: string) => {
     searchRoute.navigate({
       params: {},
       query: {
-        ...(value && { query: value }),
+        ...(value && { search: value }),
       },
     });
     searchValueUpdated(value);

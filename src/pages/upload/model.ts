@@ -29,6 +29,6 @@ sample({
 });
 
 sample({
-  clock: uploadFileFx.done,
+  clock: uploadFileFx.doneData,
   target: getLastUploadDate,
 });

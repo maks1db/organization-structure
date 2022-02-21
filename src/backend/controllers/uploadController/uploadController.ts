@@ -1,3 +1,5 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
 import { RequestHandler } from 'express';
 import { UploadDate, Art, Employee, Position } from 'backend/models';
 import { WorkSheet } from 'node-xlsx';
@@ -66,7 +68,7 @@ export const uploadXlsx: RequestHandler = async (req, res) => {
     }))
   );
 
-  arts.forEach(art => {
+  for (const art of arts) {
     const artItems = uniqArtEmployees
       .filter(x => x[0] === art.name)
       .map(x => ({
@@ -82,15 +84,15 @@ export const uploadXlsx: RequestHandler = async (req, res) => {
     // @ts-ignore
     // eslint-disable-next-line no-param-reassign
     art.employees = artItems;
-    art.save();
-  });
-
-  res.status(200).json({
-    result: uniqEmployees,
-  });
+    await art.save();
+  }
 
   await UploadDate.insertMany({
     date: new Date().toISOString(),
+  });
+
+  res.status(200).json({
+    result: 'ok',
   });
 };
 

@@ -1,32 +1,42 @@
 import { CircularProgress } from '@abdt/ornament';
 import { LastUpdate } from 'widgets/last-update';
+import { combine } from 'effector';
+import { useStore } from 'effector-react';
 import { Logo } from './ui/Icons';
 import { SearchResultItem } from './ui/search-result-item';
 import { SearchInput } from './ui/search-input';
 
-import './model';
+import { $searchResult, searchFx } from './model';
 
-export const Page = () => (
-  <>
-    <LastUpdate />
-    <div className="mb-8">
-      <Logo />
-    </div>
-    <SearchInput />
-    <div className="w-full mt-2">
-      <SearchResultItem
-        title="Скворцов Максим Михайлович"
-        description="Подразделение ЕПЦ"
-        type="employee"
-      />
-      <SearchResultItem
-        title="ЕПЦ"
-        description="Команд: 10; Сотрудников: 20"
-        type="art"
-      />
-    </div>
-    <div className="mt-6">
-      <CircularProgress size={50} />
-    </div>
-  </>
-);
+const $store = combine({
+  isFetching: searchFx.pending,
+  searchResult: $searchResult,
+});
+
+export const Page = () => {
+  const { isFetching, searchResult } = useStore($store);
+
+  console.log(isFetching, searchResult);
+  return (
+    <>
+      <LastUpdate />
+      <div className="mb-8">
+        <Logo />
+      </div>
+      <SearchInput />
+      {!isFetching && (
+        <div className="w-full mt-2">
+          {searchResult.map((x, ind) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <SearchResultItem key={`${x.entityId}-${ind}`} {...x} />
+          ))}
+        </div>
+      )}
+      {isFetching && (
+        <div className="mt-6">
+          <CircularProgress size={50} />
+        </div>
+      )}
+    </>
+  );
+};

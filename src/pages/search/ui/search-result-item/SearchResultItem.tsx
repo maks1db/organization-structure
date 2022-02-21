@@ -1,4 +1,8 @@
-import { List as ListIcon, User as UserIcon } from '@abdt/icons';
+import {
+  List as ListIcon,
+  User as UserIcon,
+  TechChat as TechChatIcon,
+} from '@abdt/icons';
 import { Typography } from '@abdt/ornament';
 import { IconProps } from '@material-ui/core';
 import { FC } from 'react';
@@ -7,21 +11,24 @@ import { EntityType } from 'shared/types/api';
 import styles from './SearchResultItem.module.scss';
 
 interface ResultItemProps {
-  title: string;
+  name: string;
   description: string;
   type: EntityType;
+  entityId: string;
 }
 
 const Icons = {
   art: ListIcon,
   employee: UserIcon,
-  team: ListIcon,
+  team: TechChatIcon,
 } as Record<EntityType, FC<IconProps>>;
 
 export const SearchResultItem: FC<ResultItemProps> = ({
-  title,
+  name,
   description,
   type,
+  // TODO: Открытие по ссылке
+  entityId,
 }) => {
   const Icon = Icons[type];
   return (
@@ -33,14 +40,14 @@ export const SearchResultItem: FC<ResultItemProps> = ({
         <Typography
           variant="body1"
           component="span"
-          className="font-medium text-abdt-gray850"
+          className="font-medium text-gray-900"
         >
-          {title}
+          {name}
         </Typography>
         <Typography
           variant="caption"
           component="span"
-          className="font-medium text-abdt-gray500"
+          className="font-medium text-gray-400"
         >
           {description}
         </Typography>
