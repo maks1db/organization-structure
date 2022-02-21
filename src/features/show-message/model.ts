@@ -17,16 +17,16 @@ export const $messages = createStore<MessageType[]>([])
   .on(deleteMsg, (state, payload) => state.filter(x => x.id !== payload));
 
 export const showAppMessage = (
-  message: string,
-  variant?: MessageProps['variant']
+  variant: MessageProps['variant'],
+  message?: string
 ) =>
-  createEffect(() => {
+  createEffect((effectorMessage?: string) => {
     const id = new Date().valueOf();
 
     setTimeout(() => deleteMsg(id), TIMEOUT_VISIBLE_MESSAGE);
     addMsg({
       id,
-      message,
+      message: message || effectorMessage || '',
       variant: variant || 'info',
     });
   });

@@ -1,7 +1,10 @@
 import express from 'express';
+import multer from 'multer';
 import * as uploadController from '../../controllers/uploadController';
 
 export const uploadRouter = express.Router();
 
-uploadRouter.post('/xlsx', uploadController.uploadXlsx);
+const upload = multer({ dest: './.temp' });
+
+uploadRouter.post('/xlsx', upload.single('file'), uploadController.uploadXlsx);
 uploadRouter.get('/lastDate', uploadController.getLastUploadDate);

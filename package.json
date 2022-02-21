@@ -10,7 +10,7 @@
     "server": "json-server utils/mock/index.js --no-cors --port 3100",
     "test": "jest",
     "typecheck": "tsc --project tsconfig.json",
-    "server:dev": "nodemon",
+    "server:dev": "nodemon --inspect ./src/backend/controllers/uploadController.ts",
     "server:dev:db": "docker run  -d -p 27017:27017 -v $(pwd)/mongo-db:/data/db mongo" 
   },
   "repository": {
@@ -38,7 +38,10 @@
     "react-dom": "~17.0.2",
     "tailwindcss": "~2.2.19",
     "mongodb": "~4.4.0",
-    "mongoose": "~6.2.2"
+    "mongoose": "~6.2.2",
+    "node-xlsx": "~0.21.0",
+    "multer": "~1.4.4",
+    "fp-ts": "~2.11.8"
   },
   "devDependencies": {
     "@babel/cli": "~7.17.0",
@@ -54,6 +57,7 @@
     "@types/ramda": "~0.27.64",
     "@types/react": "~17.0.39",
     "@types/react-dev-utils": "~9.0.10",
+    "@types/multer": "~1.4.7",
     "@types/react-dom": "~17.0.11",
     "@types/webpack-merge": "~5.0.0",
     "@typescript-eslint/eslint-plugin": "~5.10.2",

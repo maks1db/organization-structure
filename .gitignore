@@ -3,3 +3,4 @@ public/*
 .vscode
 yarn-error.log
 mongo-db
+.temp

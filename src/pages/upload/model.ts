@@ -1,5 +1,6 @@
-import { createEffect, createEvent, split } from 'effector';
+import { createEffect, createEvent, sample, split } from 'effector';
 import { showAppMessage } from 'features/show-message';
+import { path } from 'ramda';
 import { uploadXlsx } from 'shared/api/upload';
 
 import { isExcel } from './lib';
@@ -16,6 +17,12 @@ split({
   match: (file: File) => (isExcel(file.name) ? 'upload' : 'error'),
   cases: {
     upload: uploadFileFx,
-    error: showAppMessage(VALIDATION_ERROR_MESSAGE, 'warning'),
+    error: showAppMessage('warning', VALIDATION_ERROR_MESSAGE),
   },
+});
+
+sample({
+  clock: uploadFileFx.failData,
+  fn: data => path(['response', 'data'], data),
+  target: showAppMessage('danger'),
 });
