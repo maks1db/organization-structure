@@ -16,7 +16,6 @@ const $store = combine({
 export const Page = () => {
   const { isFetching, searchResult } = useStore($store);
 
-  console.log(isFetching, searchResult);
   return (
     <>
       <LastUpdate />
