@@ -2,7 +2,12 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import mongoose from 'mongoose';
 
-import { ArtType, EmployeeType, PositionType } from 'shared/types/api';
+import {
+  ArtType,
+  EmployeeType,
+  PositionType,
+  ArtPositionType,
+} from 'shared/types/api';
 import { postSaveArt, postSaveEmployee } from './middlewares';
 
 const font = {
@@ -15,6 +20,13 @@ const font = {
 
 const positionScheme = new mongoose.Schema<PositionType>({ name: String });
 export const Position = mongoose.model('Position', positionScheme);
+
+const artPositionScheme = new mongoose.Schema<ArtPositionType>({
+  name: String,
+  group: String,
+  positions: [{ type: mongoose.Types.ObjectId, ref: Position }],
+});
+export const ArtPosition = mongoose.model('ArtPosition', artPositionScheme);
 
 const employeeScheme = new mongoose.Schema<EmployeeType>({
   name: String,
@@ -36,9 +48,10 @@ const artScheme = new mongoose.Schema<ArtType>({
   name: String,
   owner: { type: mongoose.Types.ObjectId, ref: Employee },
   color: String,
+  isRaw: Boolean,
   positions: [
     {
-      position: { type: mongoose.Types.ObjectId, ref: Position },
+      position: { type: mongoose.Types.ObjectId, ref: ArtPosition },
       color: String,
       font,
     },
@@ -48,6 +61,7 @@ const artScheme = new mongoose.Schema<ArtType>({
     {
       employee: { type: mongoose.Types.ObjectId, ref: Employee },
       team: { type: mongoose.Types.ObjectId, ref: 'Art.teams' },
+      position: { type: mongoose.Types.ObjectId, ref: ArtPosition },
       color: String,
       font,
       rate: String,

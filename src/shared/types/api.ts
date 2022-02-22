@@ -36,13 +36,21 @@ type TeamType = {
   font?: FontType;
 };
 
+export type ArtPositionType = {
+  _id: string;
+  name: string;
+  group: string;
+  positions: PositionType[];
+};
+
 export type ArtType = {
   _id: string;
   name: string;
   owner?: EmployeeType;
   color?: string;
+  isRaw?: boolean;
   positions: {
-    position: PositionType;
+    position: ArtPositionType;
     color?: string;
     font?: FontType;
   }[];
