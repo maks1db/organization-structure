@@ -21,8 +21,8 @@ export type EmployeeType = {
   };
 };
 
-type FontType = {
-  size?: string;
+// TODO: Нужен ли size?
+export type FontType = {
   color?: string;
   bold?: boolean;
   italic?: boolean;

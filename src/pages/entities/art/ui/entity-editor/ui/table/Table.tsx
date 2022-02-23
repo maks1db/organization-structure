@@ -8,14 +8,17 @@ import {
   TableCell,
   TableHead,
 } from '@abdt/ornament';
+import { useStore } from 'effector-react';
+import { $entityTitle } from '../../model';
 
 export const Table: FC<{ className: string }> = ({ className }) => {
+  const title = useStore($entityTitle);
   return (
     <TableContainer component={Paper} className={className}>
       <BaseTable>
         <TableHead>
           <TableRow>
-            <TableCell>Сотрудники</TableCell>
+            <TableCell>{title}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
