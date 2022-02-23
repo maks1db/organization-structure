@@ -2,7 +2,7 @@ import { CircularProgress } from '@abdt/ornament';
 import { LastUpdate } from 'widgets/last-update';
 import { combine } from 'effector';
 import { useStore } from 'effector-react';
-import { Logo } from './ui/Icons';
+import { AbdtLogo } from '@abdt/icons';
 import { SearchResultItem } from './ui/search-result-item';
 import { SearchInput } from './ui/search-input';
 
@@ -20,7 +20,7 @@ export const Page = () => {
     <>
       <LastUpdate />
       <div className="mb-8">
-        <Logo />
+        <AbdtLogo />
       </div>
       <SearchInput />
       {!isFetching && (
