@@ -1,0 +1,26 @@
+
+
+.closeIcon {
+    @apply absolute 
+        top-2 
+        right-1 
+        rounded-full 
+        bg-white 
+        p-px 
+        shadow 
+        hidden;
+}
+
+.entity {
+    &:hover {
+        .closeIcon {
+            @apply block;
+        }
+    }
+}
+
+.dnd {
+    .closeIcon {
+        display: none !important;
+    }
+}

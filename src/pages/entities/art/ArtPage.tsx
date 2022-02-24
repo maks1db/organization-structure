@@ -1,10 +1,11 @@
 import { FC } from 'react';
-import { EntityEditor } from './ui/entity-editor';
+import { Cell } from './ui/cell';
 
 export const Page: FC = () => {
   return (
     <>
-      <EntityEditor />
+      <Cell x={1} y={1} />
+      <Cell x={2} y={1} />
       <h1>art page</h1>
     </>
   );
