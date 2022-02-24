@@ -1,70 +1,50 @@
-import { FC, useState } from 'react';
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import { FC } from 'react';
 import cn from 'classnames';
-import { SelectItem } from 'shared/types/entities-api';
 import { Close } from '@abdt/icons';
+import { useStoreMap } from 'effector-react';
 import styles from './Entity.module.scss';
-import { setValueDnD } from './model';
+import { $movedValue } from './model';
 
-type Owner = {
-  x?: number;
-  y?: number;
-  index?: number;
+type EntityProps = {
+  name: string;
+  isEntityFromStartCell?: boolean;
+  id: string;
+  onRemove: () => void;
 };
 
-type DragNDropEntityProps = {
-  name: string;
-  onStart?: () => void;
-  onEnd?: () => void;
-  isStarted?: boolean;
-  isFake?: boolean;
-} & Owner;
-
-const DragNDropEntity: FC<DragNDropEntityProps> = ({
+export const Entity: FC<EntityProps> = ({
   name,
-  onStart,
-  onEnd,
-  isStarted,
-  isFake,
+  isEntityFromStartCell,
+  id,
+  onRemove,
 }) => {
-  const dragNDropEntity = isStarted || isFake;
+  const isMovedEntity =
+    useStoreMap($movedValue, state => state?.id === id) &&
+    isEntityFromStartCell;
+
   return (
     <div
       className={cn(
         'flex items-center justify-center text-sm h-8 bg-blue-200 relative',
-        !dragNDropEntity && styles.entity,
-        dragNDropEntity &&
-          'shadow-inner border-dashed border-2 border-abdt-neon600',
-        isStarted && 'opacity-50'
+        !isMovedEntity && styles.entity,
+        isMovedEntity &&
+          'shadow-inner border-dashed border-2 border-abdt-neon600 opacity-50'
       )}
-      draggable={!isFake}
-      onDragStart={onStart}
-      onDragEnd={onEnd}
     >
-      {!isFake && (
-        <div className={styles.closeIcon}>
-          <Close width={15} height={15} />
-        </div>
-      )}
+      <div
+        className={styles.closeIcon}
+        onClick={e => {
+          e.stopPropagation();
+          onRemove();
+        }}
+        role="button"
+        tabIndex={0}
+      >
+        <Close width={15} height={15} />
+      </div>
+
       {name}
     </div>
-  );
-};
-
-export const Entity: FC<SelectItem & Owner> = props => {
-  const [isStarted, setState] = useState(false);
-
-  return (
-    <DragNDropEntity
-      isStarted={isStarted}
-      onStart={() => {
-        setState(true);
-        setValueDnD(props);
-      }}
-      onEnd={() => {
-        setState(false);
-        setValueDnD(null);
-      }}
-      {...props}
-    />
   );
 };

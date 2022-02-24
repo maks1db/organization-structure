@@ -4,7 +4,16 @@ import { FC } from 'react';
 import cn from 'classnames';
 
 import { Entity } from './Entity';
-import { $cells, setActiveCell, $activeCell, setStartCell } from './model';
+import {
+  $cells,
+  setActiveCell,
+  $activeCell,
+  $startCell,
+  setStartCell,
+  setMovedValue,
+  valueDroppedInCell,
+  removeItem,
+} from './model';
 
 interface CellProps {
   x: number;
@@ -21,6 +30,11 @@ export const Cell: FC<CellProps> = ({ x, y }) => {
     item => item?.x === x && item?.y === y
   );
 
+  const isStartCell = useStoreMap(
+    $startCell,
+    item => item?.x === x && item?.y === y
+  );
+
   return (
     <Paper
       className={cn(
@@ -29,13 +43,47 @@ export const Cell: FC<CellProps> = ({ x, y }) => {
       )}
       onClick={() => console.log('click')}
       onDragStart={() => setStartCell({ x, y })}
-      onDragOver={() => setActiveCell({ x, y })}
+      onDragOver={e => {
+        setActiveCell({ x, y });
+        e.preventDefault();
+      }}
       onDragLeave={() => setActiveCell(null)}
-      onDrop={() => setActiveCell({ x, y })}
+      onDrop={e => {
+        e.stopPropagation();
+        valueDroppedInCell(params?.entities?.length || 0);
+      }}
     >
       {params?.entities?.map((item, ind) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <Entity key={`${item.id}-${ind}`} {...item} x={x} y={y} />
+        <div
+          draggable
+          onDragStart={() => setMovedValue(item)}
+          onDrop={e => {
+            e.stopPropagation();
+
+            const { top, height } = (
+              e.target as HTMLElement
+            ).getBoundingClientRect();
+            const move = top + height / 2 > e.clientY ? 1 : -1;
+            const insertIndex = ind - move;
+            valueDroppedInCell(insertIndex < 0 ? 0 : insertIndex);
+          }}
+          onDragOver={e => {
+            e.preventDefault();
+          }}
+          key={item.id}
+        >
+          <Entity
+            {...item}
+            isEntityFromStartCell={isStartCell}
+            onRemove={() =>
+              removeItem({
+                id: item.id,
+                x,
+                y,
+              })
+            }
+          />
+        </div>
       ))}
     </Paper>
   );
