@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-export type EntityType = 'employee' | 'art' | 'team';
+export type EntityType = 'employee' | 'art' | 'team' | 'artPosition';
 
 export type PositionType = {
   _id: string;

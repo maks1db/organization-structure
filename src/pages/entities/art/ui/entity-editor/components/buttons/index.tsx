@@ -4,6 +4,10 @@ import cn from 'classnames';
 import { Colors } from './Colors';
 import { Button } from './Button';
 import {
+  $isSelectBackgroundColorOpened,
+  $isSelectFontColorOpened,
+  setSelectBackgroundColorVisibility,
+  setSelectFontColorVisibility,
   toggleBold,
   toggleItalic,
   toggleUnderline,
@@ -14,12 +18,6 @@ import {
   setTextColor,
   $backgroundColor,
   $textColor,
-} from '../../model';
-import {
-  $isSelectBackgroundColorOpened,
-  $isSelectFontColorOpened,
-  setSelectBackgroundColorVisibility,
-  setSelectFontColorVisibility,
 } from './model';
 
 interface MainButtonProps {

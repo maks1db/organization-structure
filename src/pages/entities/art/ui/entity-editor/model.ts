@@ -1,16 +1,14 @@
+import { sample, createEvent } from 'effector';
 import { createBaseStore } from 'shared/lib/effector';
-import { createDomain, createEvent, combine } from 'effector';
-import { not } from 'ramda';
 import { EntityType } from 'shared/types/api';
+import { always } from 'ramda';
 import { getEntityTitle } from './lib';
+import { domain } from './shared';
 
-const reset = createEvent();
+import { getEntityItems } from './components/table';
 
-export const domain = createDomain();
-domain.onCreateStore(store => store.reset(reset));
-
-export const [$entity, setEntityType] = createBaseStore<EntityType>(
-  'art',
+export const [$entity, setEntityType] = createBaseStore<EntityType | ''>(
+  '',
   domain
 );
 export const $entityTitle = $entity.map(getEntityTitle);
@@ -20,28 +18,21 @@ export const [$isOpened, setEntityEditorVisibility] = createBaseStore(
   domain
 );
 
-export const toggleBold = createEvent();
-export const toggleUnderline = createEvent();
-export const toggleItalic = createEvent();
+export const entityIdSelected = createEvent<string>();
 
-export const $isBold = domain.createStore(false).on(toggleBold, not);
-export const $isUnderline = domain.createStore(false).on(toggleUnderline, not);
-export const $isItalic = domain.createStore(false).on(toggleItalic, not);
-
-export const [$backgroundColor, setBackgroundColor] = createBaseStore(
-  '',
-  domain
-);
-export const [$textColor, setTextColor] = createBaseStore('', domain);
-
-const $font = combine({
-  bold: $isBold,
-  color: $textColor,
-  italic: $isItalic,
-  underline: $isUnderline,
+sample({
+  clock: $entity,
+  filter: e => e !== '',
+  target: getEntityItems,
 });
 
-export const $store = combine({
-  color: $backgroundColor,
-  font: $font,
+sample({
+  clock: entityIdSelected,
+  fn: always(false),
+  target: setEntityEditorVisibility,
 });
+
+// TODO:  Временно!!!
+setTimeout(() => {
+  setEntityType('employee');
+}, 10);
