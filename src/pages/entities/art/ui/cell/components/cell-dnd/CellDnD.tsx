@@ -1,50 +1,41 @@
-import { Paper } from '@abdt/ornament';
 import { useStoreMap } from 'effector-react';
 import { FC } from 'react';
 import cn from 'classnames';
+import { isCellPositionsEq } from '../../lib';
+import { CellPosition } from '../../types';
 
 import { Entity } from './Entity';
+import { BaseCell } from '../base';
 import {
-  $cells,
   setActiveCell,
   $activeCell,
   $startCell,
   setStartCell,
   setMovedValue,
   valueDroppedInCell,
-  removeItem,
 } from './model';
+import { $cells, removeItem } from '../model';
 
-interface CellProps {
-  x: number;
-  y: number;
-}
-
-export const Cell: FC<CellProps> = ({ x, y }) => {
+export const CellDnD: FC<CellPosition> = cellPosition => {
   const params = useStoreMap($cells, state =>
-    state.find(item => item.x === x && item.y === y)
+    state.find(item => isCellPositionsEq(item, cellPosition))
   );
 
-  const isActiveCell = useStoreMap(
-    $activeCell,
-    item => item?.x === x && item?.y === y
+  const isActiveCell = useStoreMap($activeCell, item =>
+    isCellPositionsEq(item, cellPosition)
   );
 
-  const isStartCell = useStoreMap(
-    $startCell,
-    item => item?.x === x && item?.y === y
+  const isStartCell = useStoreMap($startCell, item =>
+    isCellPositionsEq(item, cellPosition)
   );
 
   return (
-    <Paper
-      className={cn(
-        'w-56 h-20 p-2 relative cursor-pointer shadow hover:shadow-2xl active:shadow-inner',
-        isActiveCell && 'bg-abdt-mint200'
-      )}
+    <BaseCell
+      className={cn(isActiveCell && 'bg-abdt-mint200')}
       onClick={() => console.log('click')}
-      onDragStart={() => setStartCell({ x, y })}
+      onDragStart={() => setStartCell(cellPosition)}
       onDragOver={e => {
-        setActiveCell({ x, y });
+        setActiveCell(cellPosition);
         e.preventDefault();
       }}
       onDragLeave={() => setActiveCell(null)}
@@ -78,13 +69,12 @@ export const Cell: FC<CellProps> = ({ x, y }) => {
             onRemove={() =>
               removeItem({
                 id: item.id,
-                x,
-                y,
+                ...cellPosition,
               })
             }
           />
         </div>
       ))}
-    </Paper>
+    </BaseCell>
   );
 };

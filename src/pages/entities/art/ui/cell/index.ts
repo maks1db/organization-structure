@@ -1,1 +1,1 @@
-export { Cell } from './cell';
+export { CellDnD } from './components';
