@@ -2,6 +2,7 @@
 import { useStoreMap } from 'effector-react';
 import { FC } from 'react';
 import cn from 'classnames';
+import { makeEntityPreview } from 'shared/lib/entities';
 import { isCellPositionsEq } from '../lib';
 import { CellPosition } from '../types';
 
@@ -16,7 +17,6 @@ import {
   valueDroppedInCell,
 } from './model';
 import { $cells, removeItem } from '../model';
-import { makeEntityPreview } from '../../../../../../shared/lib/entities';
 
 export const CellDnD: FC<CellPosition> = cellPosition => {
   const params = useStoreMap($cells, state =>
@@ -34,7 +34,7 @@ export const CellDnD: FC<CellPosition> = cellPosition => {
   return (
     <BaseCell
       row={cellPosition.y}
-      className={cn(isActiveCell && 'bg-abdt-mint200')}
+      className={cn(isActiveCell && 'bg-abdt-mint100')}
       onClick={() => console.log('click')}
       onDragStart={() => setStartCell(cellPosition)}
       onDragOver={e => {

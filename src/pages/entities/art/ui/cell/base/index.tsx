@@ -29,10 +29,10 @@ export const BaseEntity: FC<EntityProps> = ({
   return (
     <div
       className={cn(
-        'flex items-center justify-center text-sm h-8 bg-blue-200 relative',
+        'flex items-center justify-center text-sm h-8 relative w-full text-center',
         !isMovedEntity && styles.entity,
         isMovedEntity &&
-          'shadow-inner border-dashed border-2 border-abdt-neon600 opacity-50'
+          'shadow-inner border-dashed border-2 border-abdt-neon600 opacity-50 bg-abdt-mint100'
       )}
     >
       {onRemove && (
@@ -63,6 +63,7 @@ export const BaseCell: FC<PaperProps & BaseCellProps> = ({
   className,
   row,
   columns = 1,
+  children,
   ...rest
 }) => {
   const requiredHeight = useStoreMap(
@@ -76,7 +77,10 @@ export const BaseCell: FC<PaperProps & BaseCellProps> = ({
   return (
     <Paper
       className={cn(
-        'p-2 relative cursor-pointer shadow hover:shadow-2xl active:shadow-inner rounded-none',
+        'p-2 relative rounded-none',
+        children &&
+          'cursor-pointer shadow hover:shadow-2xl active:shadow-inner',
+        !children && 'shadow-none',
         className
       )}
       style={{
@@ -84,6 +88,8 @@ export const BaseCell: FC<PaperProps & BaseCellProps> = ({
         width: `${DEFAULT_CELL_WIDTH + width}rem`,
       }}
       {...rest}
-    />
+    >
+      {children}
+    </Paper>
   );
 };
