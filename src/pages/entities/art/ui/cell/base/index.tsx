@@ -76,7 +76,7 @@ export const BaseCell: FC<PaperProps & BaseCellProps> = ({
   return (
     <Paper
       className={cn(
-        'p-2 relative cursor-pointer shadow hover:shadow-2xl active:shadow-inner',
+        'p-2 relative cursor-pointer shadow hover:shadow-2xl active:shadow-inner rounded-none',
         className
       )}
       style={{

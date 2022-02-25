@@ -38,7 +38,7 @@ export type FontType = {
 };
 
 type TeamType = {
-  _id: string;
+  team: BaseTeamType;
   name: string;
   color?: string;
   font?: FontType;
@@ -66,7 +66,7 @@ export type ArtType = {
   employees: {
     _id: string;
     employee?: EmployeeType;
-    team?: TeamType;
+    team?: BaseTeamType;
     position?: PositionType;
     color?: string;
     font?: FontType;

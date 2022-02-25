@@ -1,11 +1,11 @@
 import { SelectItem } from 'shared/types/entities-api';
 import { EntityType } from 'shared/types/api';
-import { makeEmployeePreview } from 'shared/lib/entities';
+import { makeEntityPreview } from 'shared/lib/entities';
 
 export const prepareItems = (entity: EntityType | '', items: SelectItem[]) => {
   const result =
     entity === 'employee'
-      ? items.map(x => ({ id: x.id, name: makeEmployeePreview(x) }))
+      ? items.map(x => ({ id: x.id, name: makeEntityPreview(x) }))
       : items;
 
   return result;

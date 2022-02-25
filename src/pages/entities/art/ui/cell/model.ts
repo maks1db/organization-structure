@@ -7,7 +7,8 @@ import { isCellPositionsEq, calculateCellsHeights } from './lib';
 import { domain } from './shared';
 import { CellPosition, CellType } from './types';
 
-const addCell = createEvent<CellType>();
+export const addCell = createEvent<CellType>();
+export const pushCells = createEvent<CellType[]>();
 export const removeItem = createEvent<CellPosition & { id?: string }>();
 
 interface AddItemType extends CellPosition {
@@ -18,6 +19,7 @@ export const addItem = createEvent<AddItemType>();
 
 export const $cells = domain
   .createStore<CellType[]>([])
+  .on(pushCells, (_, payload) => payload)
   .on(addCell, (state, payload) => [...state, payload])
   .on(removeItem, (state, payload) =>
     state.map(item => {
@@ -47,44 +49,3 @@ export const $cells = domain
   );
 
 export const $cellHeights = $cells.map(calculateCellsHeights);
-
-setTimeout(() => {
-  addCell({
-    x: 1,
-    y: 1,
-    type: 'employee',
-    entities: [
-      {
-        id: '1',
-        name: 'Скворцов Максим (Ш)',
-      },
-      {
-        id: '2',
-        name: 'Камил Емилеев (Ш)',
-      },
-    ],
-  });
-
-  addCell({
-    x: 2,
-    y: 1,
-    type: 'employee',
-    entities: [
-      {
-        id: '3',
-        name: 'Артемьева Елена (Ш)',
-      },
-    ],
-  });
-  addCell({
-    x: 3,
-    y: 1,
-    type: 'employee',
-    entities: [
-      {
-        id: '4',
-        name: 'Путин Владимир (Ш)',
-      },
-    ],
-  });
-});

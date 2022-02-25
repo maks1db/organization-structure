@@ -1,4 +1,4 @@
-import { isNil, take } from 'ramda';
+import { isNil, path, take } from 'ramda';
 import { SelectItem } from '../types/entities-api';
 
 const makeSelectItemEnding = (item: SelectItem) => {
@@ -13,9 +13,12 @@ const makeSelectItemEnding = (item: SelectItem) => {
   return undefined;
 };
 
-export const makeEmployeePreview = (item: SelectItem) => {
+export const makeEntityPreview = (item: SelectItem) => {
   const ending = makeSelectItemEnding(item);
   const name = take(2, item.name.split(' ')).join(' ');
 
   return `${name} (${ending})`;
 };
+
+export const getResultFromResponse = (data: any) =>
+  path(['data', 'result'], data) as any;

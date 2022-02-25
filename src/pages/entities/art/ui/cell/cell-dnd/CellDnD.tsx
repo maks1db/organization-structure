@@ -16,6 +16,7 @@ import {
   valueDroppedInCell,
 } from './model';
 import { $cells, removeItem } from '../model';
+import { makeEntityPreview } from '../../../../../../shared/lib/entities';
 
 export const CellDnD: FC<CellPosition> = cellPosition => {
   const params = useStoreMap($cells, state =>
@@ -67,6 +68,7 @@ export const CellDnD: FC<CellPosition> = cellPosition => {
         >
           <Entity
             {...item}
+            name={makeEntityPreview(item)}
             isEntityFromStartCell={isStartCell}
             onRemove={() =>
               removeItem({

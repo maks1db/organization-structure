@@ -53,7 +53,7 @@ export const postSaveArt = async (item: ArtDbType) => {
   });
 
   const getTeamDescriptionById = getTeamDescription(item);
-  for (const team of item.teams) {
+  for (const { team } of item.teams) {
     await SearchResultItem.deleteMany({
       entityId: team._id,
     });
