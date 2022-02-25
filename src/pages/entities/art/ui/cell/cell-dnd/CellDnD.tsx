@@ -1,8 +1,9 @@
+/* eslint-disable react/destructuring-assignment */
 import { useStoreMap } from 'effector-react';
 import { FC } from 'react';
 import cn from 'classnames';
-import { isCellPositionsEq } from '../../lib';
-import { CellPosition } from '../../types';
+import { isCellPositionsEq } from '../lib';
+import { CellPosition } from '../types';
 
 import { Entity } from './Entity';
 import { BaseCell } from '../base';
@@ -31,6 +32,7 @@ export const CellDnD: FC<CellPosition> = cellPosition => {
 
   return (
     <BaseCell
+      row={cellPosition.y}
       className={cn(isActiveCell && 'bg-abdt-mint200')}
       onClick={() => console.log('click')}
       onDragStart={() => setStartCell(cellPosition)}

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { CellDnD } from './ui/cell';
+import { CellDnD, BaseCell } from './ui/cell';
 import './model';
 
 export const Page: FC = () => {

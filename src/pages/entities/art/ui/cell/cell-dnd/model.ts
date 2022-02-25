@@ -4,7 +4,7 @@ import { always } from 'ramda';
 import { createBaseStore } from 'shared/lib/effector';
 import { SelectItem } from 'shared/types/entities-api';
 
-import { CellPosition } from '../../types';
+import { CellPosition } from '../types';
 import { addItem, removeItem } from '../model';
 
 export const valueDroppedInCell = createEvent<number>();

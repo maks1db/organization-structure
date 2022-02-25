@@ -1,11 +1,90 @@
-import { EntityType } from 'shared/types/api';
-import { SelectItem } from 'shared/types/entities-api';
-import { makeEmployeePreview } from 'shared/lib/entities';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createEvent } from 'effector';
+import { insert } from 'ramda';
+import { SelectItem } from 'shared/types/entities-api';
+
+import { isCellPositionsEq, calculateCellsHeights } from './lib';
 import { domain } from './shared';
-import { CellType } from './types';
+import { CellPosition, CellType } from './types';
 
 const addCell = createEvent<CellType>();
-const $cells = domain
+export const removeItem = createEvent<CellPosition & { id?: string }>();
+
+interface AddItemType extends CellPosition {
+  value: SelectItem;
+  index: number;
+}
+export const addItem = createEvent<AddItemType>();
+
+export const $cells = domain
   .createStore<CellType[]>([])
-  .on(addCell, (state, payload) => [...state, payload]);
+  .on(addCell, (state, payload) => [...state, payload])
+  .on(removeItem, (state, payload) =>
+    state.map(item => {
+      if (isCellPositionsEq(item, payload)) {
+        return {
+          ...item,
+          entities: item.entities.filter(f => f.id !== payload.id),
+        };
+      }
+      return item;
+    })
+  )
+  .on(addItem, (state, payload) =>
+    state.map(item => {
+      if (isCellPositionsEq(item, payload)) {
+        return {
+          ...item,
+          entities: insert(
+            payload?.index || 0,
+            payload.value as any,
+            item.entities
+          ),
+        };
+      }
+      return item;
+    })
+  );
+
+export const $cellHeights = $cells.map(calculateCellsHeights);
+
+setTimeout(() => {
+  addCell({
+    x: 1,
+    y: 1,
+    type: 'employee',
+    entities: [
+      {
+        id: '1',
+        name: 'Скворцов Максим (Ш)',
+      },
+      {
+        id: '2',
+        name: 'Камил Емилеев (Ш)',
+      },
+    ],
+  });
+
+  addCell({
+    x: 2,
+    y: 1,
+    type: 'employee',
+    entities: [
+      {
+        id: '3',
+        name: 'Артемьева Елена (Ш)',
+      },
+    ],
+  });
+  addCell({
+    x: 3,
+    y: 1,
+    type: 'employee',
+    entities: [
+      {
+        id: '4',
+        name: 'Путин Владимир (Ш)',
+      },
+    ],
+  });
+});
