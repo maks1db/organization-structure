@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
-import { Art, Employee, Position, UploadDate } from 'backend/models';
+import { Art, Employee, Position, UploadDate, Team } from 'backend/models';
 import { isNil, uniq } from 'ramda';
 import { getFrom } from './lib';
 
@@ -34,9 +34,9 @@ export const uploadEmployees = async (result: unknown[][]) => {
   const uniqArtTeams = uniq(
     parsedEmployees.map(x => [x?.art, x?.team]).filter(Boolean)
   );
-  const uniqArtPositions = uniq(
-    parsedEmployees.map(x => [x?.art, x?.position]).filter(Boolean)
-  );
+  // const uniqArtPositions = uniq(
+  //   parsedEmployees.map(x => [x?.art, x?.position]).filter(Boolean)
+  // );
   const uniqEmployees = uniq(
     parsedEmployees.map(x => [x.name, x.position, x.workType, x.statInitiative])
   );
@@ -56,15 +56,19 @@ export const uploadEmployees = async (result: unknown[][]) => {
     }))
   );
 
+  const teams = await Team.insertMany(
+    uniqArtTeams
+      .filter(at => !isNil(at[1]))
+      .map(x => ({ name: x[1], ownerName: x[0] }))
+  );
+
   const arts = await Art.insertMany(
     uniqArts.map(x => ({
       name: x,
-      positions: uniqArtPositions
-        .filter(p => p[0] === x)
-        .map(async p => positions.find(s => s.name === p[1])?._id),
-      teams: uniqArtTeams
-        .filter(at => at[0] === x && !isNil(at[1]))
-        .map(at => ({ name: at[1] })),
+      // positions: uniqArtPositions
+      //   .filter(p => p[0] === x)
+      //   .map(async p => positions.find(s => s.name === p[1])?._id),
+      teams: teams.filter(team => team.ownerName === x).map(team => ({ team })),
     }))
   );
 
@@ -73,7 +77,7 @@ export const uploadEmployees = async (result: unknown[][]) => {
       .filter(x => x[0] === art.name)
       .map(x => ({
         employee: employees.find(e => e.name === x[1])?._id,
-        team: art.teams.find(t => t.name === x[3])?._id,
+        team: teams.find(t => t.name === x[3] && t.ownerName === art.name)?._id,
         color: '',
         font: {},
         rate: '',

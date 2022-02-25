@@ -7,6 +7,7 @@ import {
   EmployeeType,
   PositionType,
   ArtPositionType,
+  BaseTeamType,
 } from 'shared/types/api';
 import { postSaveArt, postSaveEmployee } from './middlewares';
 
@@ -20,6 +21,12 @@ const font = {
 
 const positionScheme = new mongoose.Schema<PositionType>({ name: String });
 export const Position = mongoose.model('Position', positionScheme);
+
+const teamScheme = new mongoose.Schema<BaseTeamType>({
+  name: String,
+  ownerName: String,
+});
+export const Team = mongoose.model('Team', teamScheme);
 
 const artPositionScheme = new mongoose.Schema<ArtPositionType>({
   name: String,
@@ -56,11 +63,13 @@ const artScheme = new mongoose.Schema<ArtType>({
       font,
     },
   ],
-  teams: [{ name: String, color: String, font }],
+  teams: [
+    { team: { type: mongoose.Types.ObjectId, ref: Team }, color: String, font },
+  ],
   employees: [
     {
       employee: { type: mongoose.Types.ObjectId, ref: Employee },
-      team: { type: mongoose.Types.ObjectId, ref: 'Art.teams' },
+      team: { type: mongoose.Types.ObjectId, ref: Team },
       position: { type: mongoose.Types.ObjectId, ref: ArtPosition },
       color: String,
       font,

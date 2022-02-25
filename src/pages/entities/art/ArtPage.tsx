@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { Cell } from './ui/cell';
+import './model';
 
 export const Page: FC = () => {
   return (

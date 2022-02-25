@@ -6,6 +6,14 @@ export type PositionType = {
   name: string;
 };
 
+export type BaseTeamType = {
+  _id: string;
+  name: string;
+  // Временный ключ для исключения переиспользования ссылок в других артах.
+  // Со временем должен быть удален
+  ownerName: string;
+};
+
 export type EmployeeType = {
   name: string;
   position: {

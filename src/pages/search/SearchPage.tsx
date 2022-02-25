@@ -1,8 +1,11 @@
+/* eslint-disable react/no-array-index-key */
 import { CircularProgress } from '@abdt/ornament';
 import { LastUpdate } from 'widgets/last-update';
 import { combine } from 'effector';
 import { useStore } from 'effector-react';
 import { AbdtLogo } from '@abdt/icons';
+import { Link } from 'atomic-router-react';
+import { entities } from 'features/routing';
 import { SearchResultItem } from './ui/search-result-item';
 import { SearchInput } from './ui/search-input';
 
@@ -26,8 +29,13 @@ export const Page = () => {
       {!isFetching && (
         <div className="w-full mt-2">
           {searchResult.map((x, ind) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <SearchResultItem key={`${x.entityId}-${ind}`} {...x} />
+            <Link
+              key={`${x.entityId}-${ind}`}
+              to={entities[x.type]}
+              params={{ id: x.entityId }}
+            >
+              <SearchResultItem {...x} />
+            </Link>
           ))}
         </div>
       )}
