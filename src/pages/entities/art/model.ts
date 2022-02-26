@@ -4,23 +4,26 @@ import { getEntityArt } from 'shared/api/entities';
 import { ArtType } from 'shared/types/api';
 import { getResultFromResponse } from 'shared/lib/entities';
 import { showAppMessage } from 'features/show-message';
-import { always } from 'ramda';
+import { always, pipe } from 'ramda';
 import { pushCells } from './ui/cell';
 import {
   buildsEmployeeCells,
   getColumnsRange,
   getRowsRange,
-  makeArtEmployeesList,
+  prepareArtPositionsRawArtEmployees,
 } from './lib';
-import { setEmployees } from './ui/right-menu';
+import { setHeader } from './ui/header';
 
 const ERROR_LOAD_MESSAGE =
   'Не удалось загрузить арт. Проверьте правильность ссылки';
+const OPEN_RAW_ART_MESSAGE =
+  'Сотрудники были распределены автоматически по ролям. Проверьте правильность операции';
 
 const getEntityArtFx = createEffect(getEntityArt);
 export const $art = createStore<ArtType | null>(null).on(
   getEntityArtFx.doneData,
-  (_, payload) => getResultFromResponse(payload)
+  (_, payload) =>
+    pipe(getResultFromResponse, prepareArtPositionsRawArtEmployees)(payload)
 );
 
 export const $columnsRange = $art.map(art => (art ? getColumnsRange(art) : []));
@@ -32,6 +35,13 @@ sample({
   filter: Boolean,
   fn: source => source,
   target: getEntityArtFx,
+});
+
+sample({
+  clock: $art,
+  filter: art => art?.isRaw === true,
+  fn: always(OPEN_RAW_ART_MESSAGE),
+  target: showAppMessage('success'),
 });
 
 sample({
@@ -49,6 +59,6 @@ sample({
 
 sample({
   clock: $art,
-  fn: art => makeArtEmployeesList(art),
-  target: setEmployees,
+  fn: art => art?.name || '',
+  target: setHeader,
 });

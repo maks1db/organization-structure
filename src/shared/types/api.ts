@@ -68,10 +68,11 @@ export type ArtType = {
     _id: string;
     employee?: EmployeeType;
     team?: BaseTeamType;
-    position?: PositionType;
+    position?: ArtPositionType;
     color?: string;
     font?: FontType;
     rate?: string;
+    isVacancy?: boolean;
   }[];
   unassignedEmployees: EmployeeType[];
 };

@@ -10,7 +10,7 @@ import {
 } from '@abdt/ornament';
 
 import { useStore } from 'effector-react';
-import { $employees } from '../../model';
+import { $employees } from './model';
 
 export const ArtEmployees: FC = () => {
   const employees = useStore($employees);

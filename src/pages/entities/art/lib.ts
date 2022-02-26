@@ -1,11 +1,35 @@
 import { ArtType } from 'shared/types/api';
 import { range } from 'ramda';
-import { makeEntityPreview } from 'shared/lib/entities';
 import { CellType } from './ui/cell';
 
 export const getColumnsRange = (art: ArtType) => range(1, art.teams.length + 1);
 export const getRowsRange = (art: ArtType) =>
   range(1, art.positions.length + 1);
+
+export const prepareArtPositionsRawArtEmployees = (art: ArtType) => {
+  if (!art.isRaw) {
+    return art;
+  }
+  /**
+   * В данной операции можно выполнять поиск для raw-данных мутабельно
+   * В будущем можно через линзы сделать иммутабельно.
+   */
+  art.employees.forEach(e => {
+    if (e.position) {
+      return;
+    }
+    const positionId = e.employee?.position?._id;
+    const employeePosition = art.positions.find(x =>
+      x.position?.positions?.some(a => a._id === positionId)
+    );
+    if (employeePosition) {
+      // eslint-disable-next-line no-param-reassign
+      e.position = employeePosition.position;
+    }
+  });
+
+  return art;
+};
 
 export const buildsEmployeeCells = (art: ArtType) => {
   const cells: CellType[] = [];
@@ -25,15 +49,9 @@ export const buildsEmployeeCells = (art: ArtType) => {
       const artPositionId = artPosition._id;
 
       cell.entities = art.employees
+
         .filter(e => {
-          return !e.position
-            ? artPosition.positions.some(
-                p => p._id === String(e.employee?.position)
-              )
-            : e.position._id === artPositionId;
-        })
-        .filter(e => {
-          return e.team?._id === teamId;
+          return e.team?._id === teamId && e.position?._id === artPositionId;
         })
         .map(e => ({
           id: e._id,
@@ -46,18 +64,4 @@ export const buildsEmployeeCells = (art: ArtType) => {
   });
 
   return cells;
-};
-
-export const makeArtEmployeesList = (art: ArtType | null) => {
-  return (
-    art?.employees
-      .filter(x => !x.position || x.team === undefined)
-      .map(x => ({
-        id: x?.employee?._id || '',
-        name: makeEntityPreview({
-          name: x?.employee?.name,
-          workType: x?.employee?.workType,
-        }),
-      })) || []
-  );
 };

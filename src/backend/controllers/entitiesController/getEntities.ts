@@ -11,7 +11,12 @@ export const art: RequestHandler = async (req, res) => {
     .populate('owner')
     .populate('positions')
     .populate('teams.team')
-    .populate('employees.employee')
+    .populate({
+      path: 'employees.employee',
+      populate: {
+        path: 'position',
+      },
+    })
     .populate('employees.team')
     .lean();
 
