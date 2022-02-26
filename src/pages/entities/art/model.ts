@@ -6,7 +6,13 @@ import { getResultFromResponse } from 'shared/lib/entities';
 import { showAppMessage } from 'features/show-message';
 import { always } from 'ramda';
 import { pushCells } from './ui/cell';
-import { buildsEmployeeCells, getColumnsRange, getRowsRange } from './lib';
+import {
+  buildsEmployeeCells,
+  getColumnsRange,
+  getRowsRange,
+  makeArtEmployeesList,
+} from './lib';
+import { setEmployees } from './ui/right-menu';
 
 const ERROR_LOAD_MESSAGE =
   'Не удалось загрузить арт. Проверьте правильность ссылки';
@@ -41,6 +47,8 @@ sample({
   target: pushCells,
 });
 
-pushCells.watch(console.log);
-
-$art.watch(console.log);
+sample({
+  clock: $art,
+  fn: art => makeArtEmployeesList(art),
+  target: setEmployees,
+});

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { ChevronRight } from '@abdt/icons';
+import { ChevronLeft } from '@abdt/icons';
 import cn from 'classnames';
 
 import { useStore } from 'effector-react';
@@ -20,7 +20,7 @@ export const MenuButton: FC = () => {
       onKeyUp={() => toggleMenuVisibility()}
       tabIndex={0}
     >
-      <ChevronRight
+      <ChevronLeft
         color="#fff"
         width={30}
         height={30}

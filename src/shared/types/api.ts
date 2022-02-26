@@ -15,6 +15,7 @@ export type BaseTeamType = {
 };
 
 export type EmployeeType = {
+  _id: string;
   name: string;
   position: {
     name: string;

@@ -3,7 +3,7 @@ import { FC } from 'react';
 import cn from 'classnames';
 import { $isOpened } from '../../model';
 
-export const Container: FC = () => {
+export const Container: FC = ({ children }) => {
   const isOpened = useStore($isOpened);
   return (
     <div
@@ -14,8 +14,7 @@ export const Container: FC = () => {
         !isOpened && 'translate-x-64'
       )}
     >
-      <h1>Подбора сотрудников</h1>
-      <h1>Нераспределенный сотрудники</h1>
+      {children}
     </div>
   );
 };

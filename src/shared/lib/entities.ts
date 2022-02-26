@@ -1,7 +1,7 @@
 import { isNil, path, take } from 'ramda';
 import { SelectItem } from '../types/entities-api';
 
-const makeSelectItemEnding = (item: SelectItem) => {
+const makeSelectItemEnding = (item: Partial<SelectItem>) => {
   if ((item.workType || '').toLowerCase().includes('аут')) {
     return 'А';
   }
@@ -13,9 +13,9 @@ const makeSelectItemEnding = (item: SelectItem) => {
   return undefined;
 };
 
-export const makeEntityPreview = (item: SelectItem) => {
+export const makeEntityPreview = (item: Partial<SelectItem>) => {
   const ending = makeSelectItemEnding(item);
-  const name = take(2, item.name.split(' ')).join(' ');
+  const name = take(2, (item?.name || '').split(' ')).join(' ');
 
   return `${name} (${ending})`;
 };

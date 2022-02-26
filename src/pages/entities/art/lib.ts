@@ -1,5 +1,6 @@
 import { ArtType } from 'shared/types/api';
 import { range } from 'ramda';
+import { makeEntityPreview } from 'shared/lib/entities';
 import { CellType } from './ui/cell';
 
 export const getColumnsRange = (art: ArtType) => range(1, art.teams.length + 1);
@@ -45,4 +46,18 @@ export const buildsEmployeeCells = (art: ArtType) => {
   });
 
   return cells;
+};
+
+export const makeArtEmployeesList = (art: ArtType | null) => {
+  return (
+    art?.employees
+      .filter(x => !x.position || x.team === undefined)
+      .map(x => ({
+        id: x?.employee?._id || '',
+        name: makeEntityPreview({
+          name: x?.employee?.name,
+          workType: x?.employee?.workType,
+        }),
+      })) || []
+  );
 };
