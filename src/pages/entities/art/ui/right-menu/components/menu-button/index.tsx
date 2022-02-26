@@ -10,7 +10,7 @@ export const MenuButton: FC = () => {
   return (
     <div
       className={cn(
-        'bg-abdt-mint400 w-10 h-14 shadow right-0 top-1/2 transition-all fixed',
+        'bg-abdt-mint400 w-10 h-14 shadow right-0 top-1/2 transition-all fixed z-20',
         'flex items-center justify-center transform duration-500',
         'rounded-tl-md rounded-bl-md',
         isOpened && '-translate-x-64'
