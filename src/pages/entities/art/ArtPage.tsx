@@ -4,6 +4,7 @@ import { combine } from 'effector';
 import { CellDnD, BaseCell, BaseEntity, DEFAULT_CELL_WIDTH } from './ui/cell';
 import { $art, $columnsRange, $rowsRange } from './model';
 import { Header } from './ui/header';
+import { RightMenu } from './ui/right-menu';
 
 const $store = combine({
   art: $art,
@@ -16,7 +17,8 @@ export const Page: FC = () => {
   return (
     <>
       <Header />
-      <div className="w-full relative">
+      <div className="w-full relative top-14">
+        <RightMenu />
         <div className="absolute z-10">
           <BaseCell row={0} className="mb-1 mr-1 font-bold flex" />
           {art?.positions.map((x, ind) => (
