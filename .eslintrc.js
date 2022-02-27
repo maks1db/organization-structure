@@ -267,7 +267,6 @@ module.exports = {
     'max-lines': ['error', 300],
     'react/require-default-props': 'off',
     'react/jsx-uses-react': 'off',
-    'react/react-in-jsx-scope': 'off',
-    'prettier/prettier': 'off',
+    'react/react-in-jsx-scope': 'off'
   },
 };

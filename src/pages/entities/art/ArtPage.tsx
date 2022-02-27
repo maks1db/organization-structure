@@ -1,27 +1,12 @@
 import { FC } from 'react';
-import { useStore } from 'effector-react';
-import { combine } from 'effector';
-import { CellDnD, BaseCell, BaseEntity, DEFAULT_CELL_WIDTH } from './ui/cell';
-import {
-  $columnsRange,
-  $rowsRange,
-  $positions,
-  removeRow,
-  removeColumn,
-  $teams,
-} from './model';
+
+import { Employees, Positions, Teams } from './ui/art-structure';
+import { BaseCell, DEFAULT_CELL_WIDTH } from './ui/cell';
 import { Header } from './ui/header';
 import { RightMenu } from './ui/right-menu';
-
-const $store = combine({
-  columnsRange: $columnsRange,
-  rowsRange: $rowsRange,
-  positions: $positions,
-  teams: $teams,
-});
+import './model';
 
 export const Page: FC = () => {
-  const { columnsRange, rowsRange, positions, teams } = useStore($store);
   return (
     <>
       <Header />
@@ -29,35 +14,13 @@ export const Page: FC = () => {
         <RightMenu />
         <div className="absolute z-10">
           <BaseCell row={0} className="mb-1 mr-1 font-bold flex" />
-          {positions.map((x, ind) => (
-            <BaseCell row={ind + 1} className="mb-1 mr-1 font-bold">
-              <BaseEntity
-                name={x.position.name}
-                onRemove={() => removeRow(x.position._id)}
-              />
-            </BaseCell>
-          ))}
+          <Positions />
         </div>
         <div className="relative" style={{ left: `${DEFAULT_CELL_WIDTH}rem` }}>
           <div className="flex">
-            {teams.map(x => (
-              <BaseCell row={0} className="mb-1 mr-1 font-bold flex">
-                <BaseEntity
-                  name={x.team.name}
-                  onRemove={() => removeColumn(x.team._id)}
-                />
-              </BaseCell>
-            ))}
+            <Teams />
           </div>
-          {rowsRange.map(y => (
-            <div className="flex" key={y}>
-              {columnsRange.map(x => (
-                <div key={x} className="mb-1 mr-1">
-                  <CellDnD x={x} y={y} />
-                </div>
-              ))}
-            </div>
-          ))}
+          <Employees />
         </div>
       </div>
     </>
