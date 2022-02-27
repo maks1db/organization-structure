@@ -13,7 +13,7 @@ import { CellPosition } from '../types';
 import { CELL_ENTITY, ART_EMPLOYEE, EMPLOYEE } from '../../../constants';
 
 export type DroppedValueType = DroppedValue<
-  { id: string },
+  { id: string, uid?: string },
   CellPosition,
   { index: number } & CellPosition
 >;
@@ -53,7 +53,7 @@ sample({
     const { dropParams, value } = params as DroppedValueType;
 
     return {
-      value,
+      value: { ...value, uid: value?.uid || new Date().valueOf().toString() },
       x: dropParams.x,
       y: dropParams.y,
       index: dropParams.index,
@@ -68,3 +68,5 @@ sample({
   fn: always(null),
   target: [setActiveCell, valueFinishDropped],
 });
+
+

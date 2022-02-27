@@ -66,9 +66,10 @@ export const buildsEmployeeCells = ({
           return e.team?._id === teamId && e.position?._id === artPositionId;
         })
         .map(e => ({
-          id: e._id,
+          id: e.employee?._id as string,
           name: e.employee?.name as string,
           workType: e.employee?.workType as string,
+          uid: e._id,
         }));
 
       cells.push(cell);

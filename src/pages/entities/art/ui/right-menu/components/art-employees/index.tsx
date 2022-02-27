@@ -37,6 +37,7 @@ export const ArtEmployees: FC = () => {
                     id: x?.employee?._id,
                     name: x?.employee?.name,
                     workType: x?.employee?.workType,
+                    uid: x?._id,
                   },
                   dragParams: { rowId: x?._id },
                 });
