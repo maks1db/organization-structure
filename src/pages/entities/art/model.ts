@@ -73,7 +73,8 @@ export const $employees = createStore<ArtType['employees']>([])
             }
             return x;
         })
-    );
+);
+
 
 export const $positions = createStore<ArtType['positions']>([])
     .on($fixedArt, (_, payload) => payload.positions)
@@ -137,22 +138,21 @@ sample({
 });
 
 sample({
+  clock: removeItem,
+  fn: item => item.id || '',
+  target: removeEmployeePositionTeam,
+});
+
+sample({
     clock: addItem,
     source: combine([$positions, $teams]),
     fn: ([positions, teams], item) =>
         ({
-            position: positions[item.y - 1],
-            team: teams[item.x - 1],
+            position: positions[item.y - 1].position,
+            team: teams[item.x - 1].team,
             id: item.value.uid,
-        } as any),
+        }),
     target: setEmployeePositionTeam,
 });
 
-sample({
-    clock: removeItem,
-    fn: item => item.id || '',
-    target: removeEmployeePositionTeam,
-});
 
-$employees.watch(console.log);
-addItem.watch(console.log);

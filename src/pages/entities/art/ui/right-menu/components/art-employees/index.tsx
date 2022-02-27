@@ -22,7 +22,7 @@ export const ArtEmployees: FC = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Нераспределенные сотрудники</TableCell>
+            <TableCell>{`Нераспределенные сотрудники (${list.length} шт.)`}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
