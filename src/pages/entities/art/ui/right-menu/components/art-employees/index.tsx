@@ -10,7 +10,10 @@ import {
 } from '@abdt/ornament';
 
 import { useStore } from 'effector-react';
+import { valueDragged } from 'features/drag-n-drop';
+import { makeEntityPreview } from 'shared/lib/entities';
 import { $employees } from './model';
+import { ART_EMPLOYEE } from '../../../../constants';
 
 export const ArtEmployees: FC = () => {
   const employees = useStore($employees);
@@ -23,10 +26,25 @@ export const ArtEmployees: FC = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {employees.map((x, ind) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <TableRow draggable key={`${x.id}-${ind}`}>
-              <TableCell>{x.name}</TableCell>
+          {employees.map(x => (
+            <TableRow
+              draggable
+              key={x._id}
+              onDrag={() => {
+                valueDragged({
+                  type: ART_EMPLOYEE,
+                  value: {
+                    id: x?.employee?._id,
+                    name: x?.employee?.name,
+                    workType: x?.employee?.workType,
+                  },
+                  dragParams: { rowId: x?._id },
+                });
+              }}
+            >
+              <TableCell>
+                {x.employee ? makeEntityPreview(x.employee) : ''}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

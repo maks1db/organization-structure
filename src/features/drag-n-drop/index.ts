@@ -15,7 +15,7 @@ export interface DroppedValue<
 
 type DragValue = {
   type: string;
-  value: { id: string };
+  value: any;
   dragParams?: Record<string, unknown>;
 };
 

@@ -10,13 +10,15 @@ import { always } from 'ramda';
 
 import { addItem, removeItem } from '../model';
 import { CellPosition } from '../types';
-import { ART_EMPLOYEE } from '../../../constants';
+import { CELL_ENTITY, ART_EMPLOYEE, EMPLOYEE } from '../../../constants';
 
 export type DroppedValueType = DroppedValue<
   { id: string },
   CellPosition,
   { index: number } & CellPosition
 >;
+
+export const possibleDropEntities = [ART_EMPLOYEE, CELL_ENTITY, EMPLOYEE];
 
 export const valueDroppedInCell = createEvent<number>();
 
@@ -33,6 +35,7 @@ sample({
 
 sample({
   clock: $droppedValue,
+  filter: value => value.type === CELL_ENTITY,
   fn: (params: any) => {
     const { dragParams, value } = params as DroppedValueType;
     return {
@@ -61,7 +64,7 @@ sample({
 
 sample({
   clock: $droppedValue,
-  filter: val => val.type === ART_EMPLOYEE,
+  filter: val => val.type === CELL_ENTITY,
   fn: always(null),
   target: [setActiveCell, valueFinishDropped],
 });

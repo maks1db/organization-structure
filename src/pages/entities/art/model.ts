@@ -1,4 +1,4 @@
-import { createEffect, sample, createStore } from 'effector';
+import { createEffect, sample, createStore, createEvent } from 'effector';
 import { entities } from 'features/routing';
 import { getEntityArt } from 'shared/api/entities';
 import { ArtType } from 'shared/types/api';
@@ -20,14 +20,24 @@ const OPEN_RAW_ART_MESSAGE =
   'Сотрудники были распределены автоматически по ролям. Проверьте правильность операции';
 
 const getEntityArtFx = createEffect(getEntityArt);
-export const $art = createStore<ArtType | null>(null).on(
-  getEntityArtFx.doneData,
-  (_, payload) =>
-    pipe(getResultFromResponse, prepareArtPositionsRawArtEmployees)(payload)
+
+const $fixedArt = getEntityArtFx.doneData.map(
+  pipe(getResultFromResponse, prepareArtPositionsRawArtEmployees)
 );
 
-export const $columnsRange = $art.map(art => (art ? getColumnsRange(art) : []));
-export const $rowsRange = $art.map(art => (art ? getRowsRange(art) : []));
+export const removeArtEmployee = createEvent<string>();
+export const $art = createStore<ArtType | null>(null)
+  .on($fixedArt, (_, payload) => payload)
+  .on(removeArtEmployee, (state, payload) => {
+    if (state?.employees) {
+      state.employees = state?.employees.filter(x => x._id !== payload);
+    }
+
+    return state;
+  });
+
+export const $columnsRange = $art.map(getColumnsRange);
+export const $rowsRange = $art.map(getRowsRange);
 
 sample({
   clock: entities.art.$isOpened,
@@ -51,7 +61,7 @@ sample({
 });
 
 sample({
-  clock: $art,
+  clock: $fixedArt,
   filter: art => art !== null,
   fn: art => buildsEmployeeCells(art as ArtType),
   target: pushCells,

@@ -16,11 +16,9 @@ import { CellPosition } from '../types';
 import { Entity } from './Entity';
 import { BaseCell } from '../base';
 
-import { setActiveCell, $activeCell } from './model';
+import { setActiveCell, $activeCell, possibleDropEntities } from './model';
 import { $cells, removeItem } from '../model';
-import { ART_EMPLOYEE, CELL_ENTITY, EMPLOYEE } from '../../../constants';
-
-const possibleDropEntities = [ART_EMPLOYEE, CELL_ENTITY, EMPLOYEE];
+import { CELL_ENTITY } from '../../../constants';
 
 export const CellDnD: FC<CellPosition> = cellPosition => {
   const params = useStoreMap($cells, state =>

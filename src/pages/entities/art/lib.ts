@@ -2,9 +2,10 @@ import { ArtType } from 'shared/types/api';
 import { range } from 'ramda';
 import { CellType } from './ui/cell';
 
-export const getColumnsRange = (art: ArtType) => range(1, art.teams.length + 1);
-export const getRowsRange = (art: ArtType) =>
-  range(1, art.positions.length + 1);
+export const getColumnsRange = (art: ArtType | null) =>
+  art ? range(1, art.teams.length + 1) : [];
+export const getRowsRange = (art: ArtType | null) =>
+  art ? range(1, art.positions.length + 1) : [];
 
 export const prepareArtPositionsRawArtEmployees = (art: ArtType) => {
   if (!art.isRaw) {
