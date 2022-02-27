@@ -3,24 +3,25 @@ import { useStore } from 'effector-react';
 import { combine } from 'effector';
 import { CellDnD, BaseCell, BaseEntity, DEFAULT_CELL_WIDTH } from './ui/cell';
 import {
-  $art,
   $columnsRange,
   $rowsRange,
   $positions,
   removeRow,
+  removeColumn,
+  $teams,
 } from './model';
 import { Header } from './ui/header';
 import { RightMenu } from './ui/right-menu';
 
 const $store = combine({
-  art: $art,
   columnsRange: $columnsRange,
   rowsRange: $rowsRange,
   positions: $positions,
+  teams: $teams,
 });
 
 export const Page: FC = () => {
-  const { columnsRange, rowsRange, art, positions } = useStore($store);
+  const { columnsRange, rowsRange, positions, teams } = useStore($store);
   return (
     <>
       <Header />
@@ -32,21 +33,19 @@ export const Page: FC = () => {
             <BaseCell row={ind + 1} className="mb-1 mr-1 font-bold">
               <BaseEntity
                 name={x.position.name}
-                onRemove={() =>
-                  removeRow({
-                    id: x.position._id,
-                    row: ind + 1,
-                  })
-                }
+                onRemove={() => removeRow(x.position._id)}
               />
             </BaseCell>
           ))}
         </div>
         <div className="relative" style={{ left: `${DEFAULT_CELL_WIDTH}rem` }}>
           <div className="flex">
-            {art?.teams.map(x => (
+            {teams.map(x => (
               <BaseCell row={0} className="mb-1 mr-1 font-bold flex">
-                <BaseEntity name={x.team.name} />
+                <BaseEntity
+                  name={x.team.name}
+                  onRemove={() => removeColumn(x.team._id)}
+                />
               </BaseCell>
             ))}
           </div>

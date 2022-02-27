@@ -1,2 +1,2 @@
 export { Header } from './Header';
-export { setHeader } from './model';
+export { setHeader, setIsArtModified } from './model';

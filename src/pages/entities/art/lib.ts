@@ -33,10 +33,20 @@ export const prepareArtPositionsRawArtEmployees = (art: ArtType) => {
   return art;
 };
 
-export const buildsEmployeeCells = (art: ArtType) => {
+interface CellsBuildProps {
+  positions: ArtType['positions'];
+  teams: ArtType['teams'];
+  employees: ArtType['employees'];
+}
+
+export const buildsEmployeeCells = ({
+  employees,
+  positions,
+  teams,
+}: CellsBuildProps) => {
   const cells: CellType[] = [];
-  const columnsRange = getColumnsRange(art);
-  const rowsRange = getRowsRange(art);
+  const columnsRange = getRange(teams);
+  const rowsRange = getRange(positions);
 
   columnsRange.forEach(x => {
     rowsRange.forEach(y => {
@@ -45,12 +55,12 @@ export const buildsEmployeeCells = (art: ArtType) => {
       cell.x = x;
       cell.y = y;
 
-      const teamId = art.teams[x - 1].team._id;
-      const artPosition = art.positions[y - 1].position;
+      const teamId = teams[x - 1].team._id;
+      const artPosition = positions[y - 1].position;
 
       const artPositionId = artPosition._id;
 
-      cell.entities = art.employees
+      cell.entities = employees
 
         .filter(e => {
           return e.team?._id === teamId && e.position?._id === artPositionId;

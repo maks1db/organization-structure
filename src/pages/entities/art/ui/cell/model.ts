@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createEvent } from 'effector';
+import { createEvent, sample } from 'effector';
 import { insert } from 'ramda';
 import { SelectItem } from 'shared/types/entities-api';
 
 import { isCellPositionsEq, calculateCellsHeights } from './lib';
 import { domain } from './shared';
 import { CellPosition, CellType } from './types';
+import { setIsArtModified } from '../header';
 
 interface AddItemType extends CellPosition {
   value: SelectItem;
@@ -15,7 +16,6 @@ interface AddItemType extends CellPosition {
 export const addCell = createEvent<CellType>();
 export const pushCells = createEvent<CellType[]>();
 export const removeItem = createEvent<CellPosition & { id?: string }>();
-export const removeItemsByRow = createEvent<number>();
 
 export const addItem = createEvent<AddItemType>();
 
@@ -48,7 +48,11 @@ export const $cells = domain
       }
       return item;
     })
-  )
-  .on(removeItemsByRow, (state, row) => state.filter(s => s.x !== row));
+  );
 
 export const $cellHeights = $cells.map(calculateCellsHeights);
+
+sample({
+  clock: [removeItem, addItem],
+  target: setIsArtModified,
+});

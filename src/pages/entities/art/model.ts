@@ -1,23 +1,34 @@
-import { createEffect, sample, createStore, createEvent } from 'effector';
+import {
+  createEffect,
+  sample,
+  createStore,
+  createEvent,
+  combine,
+} from 'effector';
 import { entities } from 'features/routing';
 import { getEntityArt } from 'shared/api/entities';
 import { ArtType } from 'shared/types/api';
 import { getResultFromResponse } from 'shared/lib/entities';
 import { showAppMessage } from 'features/show-message';
 import { always, pipe } from 'ramda';
-import { pushCells, removeItemsByRow } from './ui/cell';
+import { pushCells } from './ui/cell';
 import {
   buildsEmployeeCells,
-  getColumnsRange,
   getRange,
   prepareArtPositionsRawArtEmployees,
 } from './lib';
-import { setHeader } from './ui/header';
+import { setHeader, setIsArtModified } from './ui/header';
 
 const ERROR_LOAD_MESSAGE =
   'Не удалось загрузить арт. Проверьте правильность ссылки';
 const OPEN_RAW_ART_MESSAGE =
   'Сотрудники были распределены автоматически по ролям. Проверьте правильность операции';
+
+type SyncEventType = {
+  x: number;
+  y: number;
+  ids: string[];
+};
 
 const getEntityArtFx = createEffect(getEntityArt);
 
@@ -25,26 +36,42 @@ export const $fixedArt = getEntityArtFx.doneData.map(
   pipe(getResultFromResponse, prepareArtPositionsRawArtEmployees)
 );
 
+export const removeRow = createEvent<string>();
+export const removeColumn = createEvent<string>();
 export const removeArtEmployeeByRowIndex = createEvent<string>();
+export const syncEmployees = createEvent<SyncEventType>();
+const setEmployees = createEvent<ArtType['employees']>();
+
 export const $employees = createStore<ArtType['employees']>([])
   .on($fixedArt, (_, payload) => payload.employees)
+  .on(setEmployees, (_, payload) => payload)
   .on(removeArtEmployeeByRowIndex, (state, payload) =>
     state.filter(x => x._id !== payload)
+  )
+  .on(removeRow, (state, id) =>
+    state.map(x => {
+      if (x.position?._id === id) {
+        return { ...x, position: undefined };
+      }
+      return x;
+    })
+  )
+  .on(removeColumn, (state, id) =>
+    state.map(x => {
+      if (x.team?._id === id) {
+        return { ...x, team: undefined };
+      }
+      return x;
+    })
   );
 
-type RowEventType = {
-  row: number;
-  id: string;
-};
-export const removeRow = createEvent<RowEventType>();
 export const $positions = createStore<ArtType['positions']>([])
   .on($fixedArt, (_, payload) => payload.positions)
-  .on(removeRow, (state, { id }) => state.filter(x => x.position._id !== id));
+  .on(removeRow, (state, id) => state.filter(x => x.position._id !== id));
 
-export const $teams = createStore<ArtType['teams']>([]).on(
-  $fixedArt,
-  (_, payload) => payload.teams
-);
+export const $teams = createStore<ArtType['teams']>([])
+  .on($fixedArt, (_, payload) => payload.teams)
+  .on(removeColumn, (state, id) => state.filter(x => x.team._id !== id));
 
 // TODO: Мигрировать
 export const $art = createStore<ArtType | null>(null).on(
@@ -52,7 +79,7 @@ export const $art = createStore<ArtType | null>(null).on(
   (_, payload) => payload
 );
 
-export const $columnsRange = $art.map(getColumnsRange);
+export const $columnsRange = $teams.map(getRange);
 export const $rowsRange = $positions.map(getRange);
 
 sample({
@@ -90,7 +117,9 @@ sample({
 });
 
 sample({
-  clock: removeRow,
-  fn: params => params.row,
-  target: removeItemsByRow,
+  clock: [removeRow, removeColumn],
+  source: combine([$employees, $positions, $teams]),
+  fn: ([employees, positions, teams]) =>
+    buildsEmployeeCells({ employees, positions, teams }),
+  target: [pushCells, setIsArtModified],
 });
