@@ -5,11 +5,11 @@ import { ArtType } from 'shared/types/api';
 import { getResultFromResponse } from 'shared/lib/entities';
 import { showAppMessage } from 'features/show-message';
 import { always, pipe } from 'ramda';
-import { pushCells } from './ui/cell';
+import { pushCells, removeItemsByRow } from './ui/cell';
 import {
   buildsEmployeeCells,
   getColumnsRange,
-  getRowsRange,
+  getRange,
   prepareArtPositionsRawArtEmployees,
 } from './lib';
 import { setHeader } from './ui/header';
@@ -21,23 +21,39 @@ const OPEN_RAW_ART_MESSAGE =
 
 const getEntityArtFx = createEffect(getEntityArt);
 
-const $fixedArt = getEntityArtFx.doneData.map(
+export const $fixedArt = getEntityArtFx.doneData.map(
   pipe(getResultFromResponse, prepareArtPositionsRawArtEmployees)
 );
 
-export const removeArtEmployee = createEvent<string>();
-export const $art = createStore<ArtType | null>(null)
-  .on($fixedArt, (_, payload) => payload)
-  .on(removeArtEmployee, (state, payload) => {
-    if (state?.employees) {
-      state.employees = state?.employees.filter(x => x._id !== payload);
-    }
+export const removeArtEmployeeByRowIndex = createEvent<string>();
+export const $employees = createStore<ArtType['employees']>([])
+  .on($fixedArt, (_, payload) => payload.employees)
+  .on(removeArtEmployeeByRowIndex, (state, payload) =>
+    state.filter(x => x._id !== payload)
+  );
 
-    return state;
-  });
+type RowEventType = {
+  row: number;
+  id: string;
+};
+export const removeRow = createEvent<RowEventType>();
+export const $positions = createStore<ArtType['positions']>([])
+  .on($fixedArt, (_, payload) => payload.positions)
+  .on(removeRow, (state, { id }) => state.filter(x => x.position._id !== id));
+
+export const $teams = createStore<ArtType['teams']>([]).on(
+  $fixedArt,
+  (_, payload) => payload.teams
+);
+
+// TODO: Мигрировать
+export const $art = createStore<ArtType | null>(null).on(
+  $fixedArt,
+  (_, payload) => payload
+);
 
 export const $columnsRange = $art.map(getColumnsRange);
-export const $rowsRange = $art.map(getRowsRange);
+export const $rowsRange = $positions.map(getRange);
 
 sample({
   clock: entities.art.$isOpened,
@@ -71,4 +87,10 @@ sample({
   clock: $art,
   fn: art => art?.name || '',
   target: setHeader,
+});
+
+sample({
+  clock: removeRow,
+  fn: params => params.row,
+  target: removeItemsByRow,
 });

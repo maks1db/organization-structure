@@ -15,6 +15,7 @@ interface AddItemType extends CellPosition {
 export const addCell = createEvent<CellType>();
 export const pushCells = createEvent<CellType[]>();
 export const removeItem = createEvent<CellPosition & { id?: string }>();
+export const removeItemsByRow = createEvent<number>();
 
 export const addItem = createEvent<AddItemType>();
 
@@ -47,6 +48,7 @@ export const $cells = domain
       }
       return item;
     })
-  );
+  )
+  .on(removeItemsByRow, (state, row) => state.filter(s => s.x !== row));
 
 export const $cellHeights = $cells.map(calculateCellsHeights);

@@ -12,11 +12,11 @@ import {
 import { useStore } from 'effector-react';
 import { valueDragged } from 'features/drag-n-drop';
 import { makeEntityPreview } from 'shared/lib/entities';
-import { $employees } from './model';
+import { $list } from './model';
 import { ART_EMPLOYEE } from '../../../../constants';
 
 export const ArtEmployees: FC = () => {
-  const employees = useStore($employees);
+  const list = useStore($list);
   return (
     <TableContainer component={Paper} className="h-1/2">
       <Table>
@@ -26,7 +26,7 @@ export const ArtEmployees: FC = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {employees.map(x => (
+          {list.map(x => (
             <TableRow
               draggable
               key={x._id}
