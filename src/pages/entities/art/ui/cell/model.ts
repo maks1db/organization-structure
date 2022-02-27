@@ -7,14 +7,15 @@ import { isCellPositionsEq, calculateCellsHeights } from './lib';
 import { domain } from './shared';
 import { CellPosition, CellType } from './types';
 
-export const addCell = createEvent<CellType>();
-export const pushCells = createEvent<CellType[]>();
-export const removeItem = createEvent<CellPosition & { id?: string }>();
-
 interface AddItemType extends CellPosition {
   value: SelectItem;
   index: number;
 }
+
+export const addCell = createEvent<CellType>();
+export const pushCells = createEvent<CellType[]>();
+export const removeItem = createEvent<CellPosition & { id?: string }>();
+
 export const addItem = createEvent<AddItemType>();
 
 export const $cells = domain

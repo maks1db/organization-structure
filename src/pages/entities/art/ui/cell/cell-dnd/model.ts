@@ -1,20 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { combine, createEvent, createStore, sample } from 'effector';
-import { always } from 'ramda';
+import { createEvent, createStore, sample } from 'effector';
+import {
+  $droppedValue,
+  DroppedValue,
+  valueFinishDropped,
+} from 'features/drag-n-drop';
 import { createBaseStore } from 'shared/lib/effector';
-import { SelectItem } from 'shared/types/entities-api';
+import { always } from 'ramda';
 
-import { CellPosition } from '../types';
 import { addItem, removeItem } from '../model';
+import { CellPosition } from '../types';
+import { ART_EMPLOYEE } from '../../../constants';
+
+export type DroppedValueType = DroppedValue<
+  { id: string },
+  CellPosition,
+  { index: number } & CellPosition
+>;
 
 export const valueDroppedInCell = createEvent<number>();
-
-export const [$movedValue, setMovedValue] = createBaseStore<SelectItem | null>(
-  null
-);
-export const [$startCell, setStartCell] = createBaseStore<CellPosition | null>(
-  null
-);
 
 export const [$activeCell, setActiveCell] =
   createBaseStore<CellPosition | null>(null);
@@ -27,40 +31,37 @@ sample({
   target: $index,
 });
 
-export const $storeDnD = combine({
-  movedValue: $movedValue,
-  startCell: $startCell,
-  activeCell: $activeCell,
-  index: $index,
-});
-
 sample({
-  clock: valueDroppedInCell,
-  source: $storeDnD,
-  fn: ({ movedValue, startCell }) =>
-    ({
-      id: movedValue?.id,
-      x: startCell?.x,
-      y: startCell?.y,
-    } as any),
+  clock: $droppedValue,
+  fn: (params: any) => {
+    const { dragParams, value } = params as DroppedValueType;
+    return {
+      id: value.id,
+      x: dragParams.x,
+      y: dragParams.y,
+    };
+  },
   target: removeItem,
 });
 
 sample({
-  clock: valueDroppedInCell,
-  source: $storeDnD,
-  fn: ({ activeCell, movedValue, index }) =>
-    ({
-      value: movedValue,
-      x: activeCell?.x,
-      y: activeCell?.y,
-      index,
-    } as any),
+  clock: $droppedValue,
+  fn: (params: any) => {
+    const { dropParams, value } = params as DroppedValueType;
+
+    return {
+      value,
+      x: dropParams.x,
+      y: dropParams.y,
+      index: dropParams.index,
+    } as any;
+  },
   target: addItem,
 });
 
 sample({
-  clock: valueDroppedInCell,
+  clock: $droppedValue,
+  filter: val => val.type === ART_EMPLOYEE,
   fn: always(null),
-  target: [$movedValue, $startCell, $activeCell],
+  target: [setActiveCell, valueFinishDropped],
 });

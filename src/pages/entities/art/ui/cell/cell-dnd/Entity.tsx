@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { FC } from 'react';
 import { useStoreMap } from 'effector-react';
-import { $movedValue } from './model';
+import { $value } from 'features/drag-n-drop';
 import { BaseEntity } from '../base';
 
 type EntityProps = {
@@ -18,7 +18,7 @@ export const Entity: FC<EntityProps> = ({
   onRemove,
 }) => {
   const isMovedEntity =
-    useStoreMap($movedValue, state => state?.id === id) &&
+    useStoreMap($value, state => state?.value?.id === id) &&
     isEntityFromStartCell;
 
   return (

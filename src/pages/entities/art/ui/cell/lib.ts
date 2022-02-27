@@ -2,8 +2,8 @@ import { range } from 'ramda';
 import { CellPosition, CellType } from './types';
 
 export const isCellPositionsEq = (
-  a: CellPosition | null,
-  b: CellPosition | null
+  a: CellPosition | null | undefined | Record<string, unknown>,
+  b: CellPosition | null | undefined | Record<string, unknown>
 ) => a?.x === b?.x && a?.y === b?.y;
 
 export const calculateCellsHeights = (cells: CellType[]) => {

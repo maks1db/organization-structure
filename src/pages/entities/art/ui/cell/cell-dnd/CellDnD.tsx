@@ -2,21 +2,25 @@
 import { useStoreMap } from 'effector-react';
 import { FC } from 'react';
 import cn from 'classnames';
+
+import {
+  valueDragged,
+  valueDropped,
+  isValueCanDrop,
+  $value,
+} from 'features/drag-n-drop';
 import { makeEntityPreview } from 'shared/lib/entities';
 import { isCellPositionsEq } from '../lib';
 import { CellPosition } from '../types';
 
 import { Entity } from './Entity';
 import { BaseCell } from '../base';
-import {
-  setActiveCell,
-  $activeCell,
-  $startCell,
-  setStartCell,
-  setMovedValue,
-  valueDroppedInCell,
-} from './model';
+
+import { setActiveCell, $activeCell } from './model';
 import { $cells, removeItem } from '../model';
+import { ART_EMPLOYEE, CELL_ENTITY, EMPLOYEE } from '../../../constants';
+
+const possibleDropEntities = [ART_EMPLOYEE, CELL_ENTITY, EMPLOYEE];
 
 export const CellDnD: FC<CellPosition> = cellPosition => {
   const params = useStoreMap($cells, state =>
@@ -27,8 +31,8 @@ export const CellDnD: FC<CellPosition> = cellPosition => {
     isCellPositionsEq(item, cellPosition)
   );
 
-  const isStartCell = useStoreMap($startCell, item =>
-    isCellPositionsEq(item, cellPosition)
+  const isStartCell = useStoreMap($value, item =>
+    isCellPositionsEq(item?.dragParams, cellPosition)
   );
 
   return (
@@ -36,21 +40,31 @@ export const CellDnD: FC<CellPosition> = cellPosition => {
       row={cellPosition.y}
       className={cn(isActiveCell && 'bg-abdt-mint100')}
       onClick={() => console.log('click')}
-      onDragStart={() => setStartCell(cellPosition)}
-      onDragOver={e => {
-        setActiveCell(cellPosition);
-        e.preventDefault();
-      }}
+      onDragOver={isValueCanDrop(possibleDropEntities, () =>
+        setActiveCell(cellPosition)
+      )}
       onDragLeave={() => setActiveCell(null)}
       onDrop={e => {
         e.stopPropagation();
-        valueDroppedInCell(params?.entities?.length || 0);
+        valueDropped({
+          dropParams: {
+            index: params?.entities?.length || 0,
+            ...cellPosition,
+          },
+        });
       }}
     >
       {params?.entities?.map((item, ind) => (
         <div
           draggable
-          onDragStart={() => setMovedValue(item)}
+          onDragStart={() => {
+            valueDragged({
+              type: CELL_ENTITY,
+              value: item,
+              dragParams: cellPosition,
+            });
+            setActiveCell(cellPosition);
+          }}
           onDrop={e => {
             e.stopPropagation();
 
@@ -59,11 +73,14 @@ export const CellDnD: FC<CellPosition> = cellPosition => {
             ).getBoundingClientRect();
             const move = top + height / 2 > e.clientY ? 1 : -1;
             const insertIndex = ind - move;
-            valueDroppedInCell(insertIndex < 0 ? 0 : insertIndex);
+            valueDropped({
+              dropParams: {
+                index: insertIndex < 0 ? 0 : insertIndex,
+                ...cellPosition,
+              },
+            });
           }}
-          onDragOver={e => {
-            e.preventDefault();
-          }}
+          onDragOver={isValueCanDrop(possibleDropEntities)}
           key={item.id}
         >
           <Entity
