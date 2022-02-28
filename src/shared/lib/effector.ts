@@ -1,4 +1,4 @@
-import { createEvent, createStore, Domain } from 'effector';
+import { createEvent, createStore, Domain, createDomain } from 'effector';
 
 export const createBaseStore = <T>(defaultValue: T, domain?: Domain) => {
   const event = (domain?.createEvent || createEvent)<T>();
@@ -7,4 +7,14 @@ export const createBaseStore = <T>(defaultValue: T, domain?: Domain) => {
     (_, value) => value
   );
   return [store, event] as const;
+};
+
+export const createResetDomain = () => {
+  const domain = createDomain();
+  const reset = createEvent();
+
+  domain.onCreateStore(store => {
+    store.reset(reset);
+  });
+  return { domain, reset };
 };

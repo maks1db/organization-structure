@@ -1,4 +1,4 @@
-import { combine, createEvent, createStore, sample } from 'effector';
+import { combine, createEvent, sample } from 'effector';
 import { omit } from 'ramda';
 import {
   ArtPositionType,
@@ -6,6 +6,7 @@ import {
   BaseTeamType,
   EmployeeType,
 } from 'shared/types/api';
+import { createResetDomain } from 'shared/lib/effector';
 
 import { pushCells, addItem, removeItem } from '../cell';
 import { setIsArtModified } from '../header';
@@ -17,6 +18,8 @@ type AddEmployeeType = {
   employee: EmployeeType;
   team: BaseTeamType;
 } & RowIdType;
+
+export const { domain, reset: resetArtStructure } = createResetDomain();
 
 export const removeRow = createEvent<string>();
 export const removeColumn = createEvent<string>();
@@ -31,17 +34,20 @@ export const setEmployeePositionTeam = createEvent<{
 export const removeEmployeePositionTeam = createEvent<string>();
 export const addEmployee = createEvent<AddEmployeeType>();
 
-export const $positions = createStore<ArtType['positions']>([])
+export const $positions = domain
+  .createStore<ArtType['positions']>([])
   .on(setArtStructure, (_, payload) => payload.positions)
   .on(removeRow, (state, id) => state.filter(x => x.position._id !== id))
   .on(addRow, (state, payload) => [...state, payload]);
 
-export const $teams = createStore<ArtType['teams']>([])
+export const $teams = domain
+  .createStore<ArtType['teams']>([])
   .on(setArtStructure, (_, payload) => payload.teams)
   .on(removeColumn, (state, id) => state.filter(x => x.team._id !== id))
   .on(addColumn, (state, payload) => [...state, payload]);
 
-export const $employees = createStore<ArtType['employees']>([])
+export const $employees = domain
+  .createStore<ArtType['employees']>([])
   .on(setArtStructure, (_, payload) => payload.employees)
   .on(removeEmployeePositionTeam, (state, payload) =>
     state.map(x => {

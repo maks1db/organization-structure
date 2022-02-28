@@ -1,14 +1,14 @@
 import { createEffect, createStore, sample } from 'effector';
 import { entities } from 'features/routing';
 import { showAppMessage } from 'features/show-message';
-import { always, pipe } from 'ramda';
+import { always, isNil, pipe } from 'ramda';
 import { getEntityArt } from 'shared/api/entities';
 import { getResultFromResponse } from 'shared/lib/entities';
 import { ArtType } from 'shared/types/api';
 
 import { prepareArtPositionsRawArtEmployees } from './lib';
 import { setHeader } from './ui/header';
-import { setArtStructure } from './ui/art-structure';
+import { setArtStructure, resetArtStructure } from './ui/art-structure';
 
 const ERROR_LOAD_MESSAGE =
   'Не удалось загрузить арт. Проверьте правильность ссылки';
@@ -26,14 +26,14 @@ const $art = createStore<ArtType | null>(null).on(
 sample({
   clock: entities.art.$isOpened,
   source: entities.art.$params,
-  filter: Boolean,
+  filter: (_, isOpened) => isOpened,
   fn: source => source,
   target: getEntityArtFx,
 });
 
 sample({
   clock: $art,
-  filter: art => art?.isRaw === true,
+  filter: art => art !== null && art.isRaw === true,
   fn: always(OPEN_RAW_ART_MESSAGE),
   target: showAppMessage('success'),
 });
@@ -56,4 +56,10 @@ sample({
   clock: $art,
   filter: art => art !== null,
   target: setArtStructure,
+});
+
+sample({
+  clock: $art,
+  filter: isNil,
+  target: resetArtStructure,
 });
