@@ -10,12 +10,15 @@ import { SelectItem } from 'shared/types/entities-api';
 import { EntityType } from 'shared/types/api';
 import { getArtPositions, getEmployees, getTeams } from 'shared/api/entities';
 import { path, identity, always } from 'ramda';
-import { filterItems, prepareItems } from './lib';
+import { filterItems } from './lib';
 
 import { getEntityTitle } from '../../lib';
 import { domain } from '../../shared';
 
-export const getEntityItems = createEvent<EntityType | null>();
+export const getEntityItems = createEvent<{
+  entity: EntityType | null;
+  excludeIds: string[];
+}>();
 export const setActiveElement = createEvent<SelectItem>();
 export const setFilterValue = createEvent<string>();
 
@@ -23,8 +26,15 @@ export const getArtPositionsFx = createEffect(getArtPositions);
 export const getEmployeesFx = createEffect(getEmployees);
 export const getTeamsFx = createEffect(getTeams);
 
-const $entity = createStore<EntityType | null>(null);
+const $entity = createStore<EntityType | null>(null).on(
+  getEntityItems,
+  (_, { entity }) => entity
+);
 export const $items = createStore<SelectItem[]>([]);
+export const $excludeIds = createStore<string[]>([]).on(
+  getEntityItems,
+  (_, { excludeIds }) => excludeIds
+);
 export const $filter = domain
   .createStore('')
   .on(setFilterValue, (_, payload) => payload);
@@ -39,18 +49,11 @@ export const $isFetching = combine(
   [getArtPositionsFx.pending, getEmployeesFx.pending],
   data => data.some(Boolean)
 );
-const $modifyItems = combine([$items, $entity], ([items, entity]) =>
-  prepareItems(entity, items)
-);
-export const $filterResult = combine(
-  [$modifyItems, $filter],
-  ([items, filter]) => filterItems(filter, items)
-);
 
-sample({
-  clock: getEntityItems,
-  target: $entity,
-});
+export const $filterResult = combine(
+  [$items, $filter, $excludeIds],
+  ([items, filter, excludeIds]) => filterItems({ items, filter, excludeIds })
+);
 
 sample({
   clock: [

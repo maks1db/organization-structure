@@ -17,7 +17,7 @@ export const makeEntityPreview = (item: Partial<SelectItem>) => {
   const ending = makeSelectItemEnding(item);
   const name = take(2, (item?.name || '').split(' ')).join(' ');
 
-  return `${name} (${ending})`;
+  return ending ? `${name} (${ending})` : name;
 };
 
 export const getResultFromResponse = (data: any) =>

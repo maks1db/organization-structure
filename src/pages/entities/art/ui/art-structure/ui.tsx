@@ -29,7 +29,7 @@ export const Teams: FC = () => {
             e.preventDefault();
             openContextMenuTeams({
               anchor: e.target as HTMLElement,
-              uid: x.team._id,
+              id: x.team._id,
             });
           }}
         >
@@ -57,7 +57,7 @@ export const Positions: FC = () => {
             e.stopPropagation();
             openContextMenuArtPositions({
               anchor: e.target as HTMLElement,
-              uid: x.position._id,
+              id: x.position._id,
             });
           }}
         >

@@ -45,8 +45,8 @@ export const $entityTitle = $entity.map(getEntityTitle);
 export const entitySelected = createEvent<SelectItem>();
 
 sample({
-  clock: $entity,
-  filter: e => e !== null,
+  clock: openEntityEditor,
+  fn: ({ entity, excludeIds }) => ({ entity, excludeIds: excludeIds || [] }),
   target: getEntityItems,
 });
 
