@@ -13,22 +13,22 @@ import { combine } from 'effector';
 import { useStore } from 'effector-react';
 import cn from 'classnames';
 import {
-  $entityTitle,
   $isFetching,
-  setActiveId,
-  $activeId,
+  setActiveElement,
+  $activeElement,
   $filterResult,
+  $entityTitle,
 } from './model';
 
 const $store = combine({
   entityTitle: $entityTitle,
   isFetching: $isFetching,
-  activeId: $activeId,
+  activeElement: $activeElement,
   items: $filterResult,
 });
 
 export const Table: FC<{ className: string }> = ({ className }) => {
-  const { activeId, entityTitle, isFetching, items } = useStore($store);
+  const { activeElement, entityTitle, isFetching, items } = useStore($store);
 
   if (isFetching) {
     return <CircularProgress size={50} />;
@@ -47,9 +47,11 @@ export const Table: FC<{ className: string }> = ({ className }) => {
             <TableRow
               className="cursor-pointer"
               key={x.id}
-              onClick={() => setActiveId(x.id)}
+              onClick={() => setActiveElement(x)}
             >
-              <TableCell className={cn(x.id === activeId && 'font-bold')}>
+              <TableCell
+                className={cn(x.id === activeElement?.id && 'font-bold')}
+              >
                 {x.name}
               </TableCell>
             </TableRow>

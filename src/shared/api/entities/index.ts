@@ -10,6 +10,7 @@ export const getArtPositions = () =>
 
 export const getEmployees = () =>
   axios.get(makeApiUrl('/entities/select/employees'));
+export const getTeams = () => axios.get(makeApiUrl('/entities/select/teams'));
 
 export const getEntityArt = (params: QueryParams) =>
   axios.get(makeApiUrl('/entities/art'), { params });

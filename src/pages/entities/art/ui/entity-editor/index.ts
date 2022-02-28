@@ -1,2 +1,3 @@
-export { setEntityEditorVisibility } from './model';
 export { EntityEditor } from './EntityEditor';
+export { openEntityEditor } from './model';
+export * from './types';

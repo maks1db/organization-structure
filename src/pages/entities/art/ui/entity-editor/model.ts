@@ -1,38 +1,65 @@
-import { sample, createEvent } from 'effector';
-import { createBaseStore } from 'shared/lib/effector';
+import { sample, createEvent, createStore, createEffect } from 'effector';
 import { EntityType } from 'shared/types/api';
-import { always } from 'ramda';
+import { always, equals, F, T } from 'ramda';
+import { SelectItem } from 'shared/types/entities-api';
 import { getEntityTitle } from './lib';
-import { domain } from './shared';
+import { reset } from './shared';
 
-import { getEntityItems } from './components/table';
+import { getEntityItems, setActiveElement } from './components/table';
+import { EditorParams } from './types';
 
-export const [$entity, setEntityType] = createBaseStore<EntityType | ''>(
-  '',
-  domain
+interface EventRunnerProps {
+  event: any;
+  data: any;
+}
+
+export const openEntityEditor = createEvent<EditorParams>();
+export const closeEditor = createEvent();
+
+export const runEventFx = createEffect(({ data, event }: EventRunnerProps) => {
+  event?.(data);
+});
+
+export const $entity = createStore<EntityType | null>(null).on(
+  openEntityEditor,
+  (_, { entity }) => entity
 );
+export const $isOpened = createStore(false)
+  .on(openEntityEditor, T)
+  .on(closeEditor, F);
+
+export const $anchor = createStore<HTMLElement | null>(null).on(
+  openEntityEditor,
+  (_, { anchor }) => anchor
+);
+export const $selectEvent = createStore<((item: any) => void) | null>(null).on(
+  openEntityEditor,
+  (_, { onSelectValue }) => onSelectValue
+);
+
+export const $selectEntityEnabled = createStore(true);
+export const $modifyParamsEnabled = createStore(true);
+
 export const $entityTitle = $entity.map(getEntityTitle);
 
-export const [$isOpened, setEntityEditorVisibility] = createBaseStore(
-  false,
-  domain
-);
-
-export const entityIdSelected = createEvent<string>();
+export const entitySelected = createEvent<SelectItem>();
 
 sample({
   clock: $entity,
-  filter: e => e !== '',
+  filter: e => e !== null,
   target: getEntityItems,
 });
 
 sample({
-  clock: entityIdSelected,
-  fn: always(false),
-  target: setEntityEditorVisibility,
+  clock: entitySelected,
+  source: $selectEvent,
+  fn: (event, data) => ({ event, data }),
+  target: [runEventFx, closeEditor],
 });
 
-// TODO:  Временно!!!
-setTimeout(() => {
-  setEntityType('employee');
-}, 10);
+sample({
+  clock: $isOpened,
+  filter: equals(false),
+  fn: always(null),
+  target: [$anchor, $selectEvent, setActiveElement, reset],
+});

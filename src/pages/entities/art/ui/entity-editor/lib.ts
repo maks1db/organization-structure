@@ -1,6 +1,6 @@
 import { EntityType } from 'shared/types/api';
 
-export const getEntityTitle = (entity: EntityType | '') => {
+export const getEntityTitle = (entity: EntityType | null) => {
   if (entity === 'art') {
     return 'Арты';
   }

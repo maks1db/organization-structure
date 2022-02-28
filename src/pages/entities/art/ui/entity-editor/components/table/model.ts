@@ -8,28 +8,30 @@ import {
 } from 'effector';
 import { SelectItem } from 'shared/types/entities-api';
 import { EntityType } from 'shared/types/api';
-import { getArtPositions, getEmployees } from 'shared/api/entities';
+import { getArtPositions, getEmployees, getTeams } from 'shared/api/entities';
 import { path, identity, always } from 'ramda';
 import { filterItems, prepareItems } from './lib';
 
 import { getEntityTitle } from '../../lib';
 import { domain } from '../../shared';
 
-export const getEntityItems = createEvent<EntityType | ''>();
-export const setActiveId = createEvent<string>();
+export const getEntityItems = createEvent<EntityType | null>();
+export const setActiveElement = createEvent<SelectItem>();
 export const setFilterValue = createEvent<string>();
 
 export const getArtPositionsFx = createEffect(getArtPositions);
 export const getEmployeesFx = createEffect(getEmployees);
+export const getTeamsFx = createEffect(getTeams);
 
-const $entity = createStore<EntityType | ''>('');
+const $entity = createStore<EntityType | null>(null);
 export const $items = createStore<SelectItem[]>([]);
 export const $filter = domain
   .createStore('')
   .on(setFilterValue, (_, payload) => payload);
 
-export const $activeId = createStore('').on(setActiveId, (state, payload) =>
-  state === payload ? '' : payload
+export const $activeElement = createStore<SelectItem | null>(null).on(
+  setActiveElement,
+  (state, payload) => (state?.id === payload?.id ? null : payload)
 );
 
 export const $entityTitle = $entity.map(getEntityTitle);
@@ -51,17 +53,22 @@ sample({
 });
 
 sample({
-  clock: [getArtPositionsFx.doneData, getEmployeesFx.doneData],
+  clock: [
+    getArtPositionsFx.doneData,
+    getEmployeesFx.doneData,
+    getTeamsFx.doneData,
+  ],
   fn: data => path(['data', 'result'], data),
   target: $items,
 });
 
 split({
-  source: sample({ clock: $entity, filter: e => e !== '' }),
+  source: sample({ clock: $entity, filter: e => e !== null }),
   match: identity,
   cases: {
     employee: getEmployeesFx,
     artPosition: getArtPositionsFx,
+    team: getTeamsFx,
   },
 });
 

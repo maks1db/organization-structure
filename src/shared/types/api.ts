@@ -39,8 +39,9 @@ export type FontType = {
 };
 
 type TeamType = {
+  _id: string;
   team: BaseTeamType;
-  name: string;
+
   color?: string;
   font?: FontType;
 };

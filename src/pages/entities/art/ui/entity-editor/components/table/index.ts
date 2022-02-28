@@ -1,2 +1,8 @@
 export { Table } from './Table';
-export { getEntityItems, $activeId, $filter, setFilterValue } from './model';
+export {
+  getEntityItems,
+  $activeElement,
+  $filter,
+  setFilterValue,
+  setActiveElement,
+} from './model';

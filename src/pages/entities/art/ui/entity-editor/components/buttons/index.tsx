@@ -66,7 +66,7 @@ export const Color: FC<MainButtonProps> = ({ className }) => {
         ref={ref}
       />
       <Colors
-        refAnchorEl={ref}
+        anchorEl={ref.current}
         onClose={() => setSelectBackgroundColorVisibility(false)}
         isOpened={isOpened}
         onColorSelect={setBackgroundColor}
@@ -96,7 +96,7 @@ export const TextColor: FC<MainButtonProps> = ({ className }) => {
         <span className="text-2xl">T</span>
       </Button>
       <Colors
-        refAnchorEl={ref}
+        anchorEl={ref.current}
         onClose={() => setSelectFontColorVisibility(false)}
         isOpened={isOpened}
         onColorSelect={setTextColor}

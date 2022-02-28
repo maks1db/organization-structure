@@ -1,8 +1,8 @@
-import { FC, MutableRefObject } from 'react';
+import { FC } from 'react';
 import { Popover as PopoverBase } from '@abdt/ornament';
 
 export interface PopoverType {
-  refAnchorEl: MutableRefObject<null>;
+  anchorEl: HTMLElement | null;
   isOpened: boolean;
   onClose: () => void;
 }
@@ -10,14 +10,14 @@ export interface PopoverType {
 export const Popover: FC<PopoverType> = ({
   isOpened,
   onClose,
-  refAnchorEl,
+  anchorEl,
   children,
 }) => {
   return (
     <PopoverBase
       open={isOpened}
       onClose={onClose}
-      anchorEl={refAnchorEl.current}
+      anchorEl={anchorEl}
       anchorOrigin={{
         vertical: 'bottom',
         horizontal: 'right',
