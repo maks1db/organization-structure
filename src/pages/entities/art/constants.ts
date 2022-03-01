@@ -1,6 +1,8 @@
 export const CELL_ENTITY = 'cell-entity';
 export const EMPLOYEE = 'employee';
 export const ART_EMPLOYEE = 'art-employee';
+export const TEAM = 'team-cell';
+export const POSITION = 'position-cell';
 
 export const ERROR_LOAD_MESSAGE =
   'Не удалось загрузить арт. Проверьте правильность ссылки';

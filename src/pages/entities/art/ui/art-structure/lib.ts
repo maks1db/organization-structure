@@ -1,5 +1,6 @@
-import { range } from 'ramda';
+import { insert, path, range, remove } from 'ramda';
 import { ArtType } from 'shared/types/api';
+
 import { CellType } from '../cell';
 
 export const getRange = (data: unknown[]) => range(1, data.length + 1);
@@ -48,4 +49,12 @@ export const buildsEmployeeCells = ({
   });
 
   return cells;
+};
+
+export const moveItem = <T>(from: number, to: number, items: T[]) => {
+  const item = items[from];
+  const dropItems = remove(from, 1, items) as any[];
+  const data = insert(to, item, dropItems) as T[];
+
+  return data;
 };

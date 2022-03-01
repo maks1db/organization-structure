@@ -1,6 +1,11 @@
 import { combine } from 'effector';
 import { useStore } from 'effector-react';
 import { FC } from 'react';
+import {
+  isValueCanDrop,
+  valueDragged,
+  valueDropped,
+} from 'features/drag-n-drop';
 import { BaseCell, BaseEntity, CellDnD } from '../cell';
 import {
   $columnsRange,
@@ -15,12 +20,14 @@ import {
   openContextMenuArtPositions,
   openContextMenuEmployees,
 } from './context-menu-model';
+import './drag-n-drop-model';
+import { POSITION, TEAM } from '../../constants';
 
 export const Teams: FC = () => {
   const teams = useStore($teams);
   return (
     <>
-      {teams.map(x => (
+      {teams.map((x, ind) => (
         <BaseCell
           row={0}
           className="mb-1 mr-1 font-bold flex"
@@ -32,6 +39,21 @@ export const Teams: FC = () => {
               id: x.team._id,
             });
           }}
+          onDrag={() => {
+            valueDragged({
+              type: TEAM,
+              value: ind,
+            });
+          }}
+          onDragOver={isValueCanDrop([TEAM])}
+          draggable
+          onDrop={() =>
+            valueDropped({
+              dropParams: {
+                index: ind,
+              },
+            })
+          }
         >
           <BaseEntity
             name={x.team.name}
@@ -60,6 +82,21 @@ export const Positions: FC = () => {
               id: x.position._id,
             });
           }}
+          onDrag={() => {
+            valueDragged({
+              type: POSITION,
+              value: ind,
+            });
+          }}
+          onDragOver={isValueCanDrop([POSITION])}
+          draggable
+          onDrop={() =>
+            valueDropped({
+              dropParams: {
+                index: ind,
+              },
+            })
+          }
         >
           <BaseEntity
             name={x.position.name}

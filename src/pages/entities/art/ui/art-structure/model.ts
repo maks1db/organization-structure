@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-delimiter-style */
 import { combine, createEvent, sample } from 'effector';
 import { omit, T } from 'ramda';
 import {
@@ -9,7 +10,7 @@ import {
 import { createResetDomain } from 'shared/lib/effector';
 
 import { pushCells, addItem, removeItem } from '../cell';
-import { buildsEmployeeCells, getRange } from './lib';
+import { buildsEmployeeCells, getRange, moveItem } from './lib';
 
 type RowIdType = { _id: string };
 type AddEmployeeType = {
@@ -24,6 +25,8 @@ export const removeRow = createEvent<string>();
 export const removeColumn = createEvent<string>();
 export const addColumn = createEvent<{ team: BaseTeamType } & RowIdType>();
 export const addRow = createEvent<{ position: ArtPositionType } & RowIdType>();
+export const moveRow = createEvent<{ from: number; to: number }>();
+export const moveColumn = createEvent<{ from: number; to: number }>();
 export const setArtStructure = createEvent<ArtType>();
 export const setEmployeePositionTeam = createEvent<{
   team: BaseTeamType;
@@ -38,13 +41,15 @@ export const $positions = domain
   .createStore<ArtType['positions']>([])
   .on(setArtStructure, (_, payload) => payload.positions)
   .on(removeRow, (state, id) => state.filter(x => x.position._id !== id))
-  .on(addRow, (state, payload) => [...state, payload]);
+  .on(addRow, (state, payload) => [...state, payload])
+  .on(moveRow, (state, { from, to }) => moveItem(from, to, state));
 
 export const $teams = domain
   .createStore<ArtType['teams']>([])
   .on(setArtStructure, (_, payload) => payload.teams)
   .on(removeColumn, (state, id) => state.filter(x => x.team._id !== id))
-  .on(addColumn, (state, payload) => [...state, payload]);
+  .on(addColumn, (state, payload) => [...state, payload])
+  .on(moveColumn, (state, { from, to }) => moveItem(from, to, state));
 
 export const $employees = domain
   .createStore<ArtType['employees']>([])
@@ -94,8 +99,18 @@ sample({
 
 const $source = combine([$employees, $positions, $teams]);
 
+const updateEvents = [
+  removeRow,
+  removeColumn,
+  addColumn,
+  addRow,
+  addEmployee,
+  moveRow,
+  moveColumn,
+];
+
 sample({
-  clock: [removeRow, removeColumn, addColumn, addRow, addEmployee],
+  clock: updateEvents,
   source: $source,
   fn: ([employees, positions, teams]) =>
     buildsEmployeeCells({ employees, positions, teams }),
@@ -103,15 +118,7 @@ sample({
 });
 
 sample({
-  clock: [
-    removeRow,
-    removeColumn,
-    addColumn,
-    addRow,
-    addEmployee,
-    addItem,
-    removeItem,
-  ],
+  clock: [...updateEvents, addItem, removeItem],
   fn: T,
   target: artModified,
 });
@@ -125,6 +132,7 @@ sample({
 sample({
   clock: addItem,
   source: combine([$positions, $teams]),
+  filter: (_, { x, y }) => x !== undefined && y !== undefined,
   fn: ([positions, teams], item) => ({
     position: positions[item.y - 1].position,
     team: teams[item.x - 1].team,
