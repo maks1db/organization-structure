@@ -8,7 +8,7 @@ const themeColors = Object.entries(colors)
 
 module.exports = {
   purge: {
-    enabled: false,
+    enabled: process.env.NODE_ENV !== 'development',
     content: ['./src/**/*.tsx'],
   },
   darkMode: false, // or 'media' or 'class'

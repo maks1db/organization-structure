@@ -13,5 +13,5 @@ const presets = [
 
 module.exports = {
     presets,
-    plugins: [enableReactRefresh && 'react-refresh/babel'].filter(Boolean),
+    plugins: [enableReactRefresh && 'react-refresh/babel', 'ramda'].filter(Boolean),
 };

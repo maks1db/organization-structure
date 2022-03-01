@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import path from 'path';
 
 import { PORT } from 'shared/constants';
 import * as db from './db';
@@ -9,15 +10,6 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-// app.use(
-//   '/uploads',
-//   express.static(path.join(__dirname, '../../../public/uploads'))
-// );
-// app.use(
-//   '/assets',
-//   express.static(path.join(__dirname, '../../../public/assets'))
-// );
 
 if (process.env.NODE_ENV === 'development') {
   app.use((req, res, next) => {
@@ -38,13 +30,11 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-app.get('/test', (_, res) => res.json({ msg: 'wow' }));
 app.use('/api', router);
-
-// app.use('', routes);
-// app.get('*', (req, res) => {
-//   res.sendFile(path.resolve(__dirname, '../../public/', 'index.html'));
-// });
+app.use(express.static(path.resolve(__dirname, '../../public/')));
+app.get('*', (_, res) => {
+  res.sendFile(path.resolve(__dirname, '../../public/', 'index.html'));
+});
 
 db.connect();
 app.listen(PORT, () =>
