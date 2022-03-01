@@ -132,7 +132,7 @@ sample({
 sample({
   clock: addItem,
   source: combine([$positions, $teams]),
-  filter: (_, { x, y }) => x !== undefined && y !== undefined,
+  // filter: (_, { x, y }) => x !== undefined && y !== undefined,
   fn: ([positions, teams], item) => ({
     position: positions[item.y - 1].position,
     team: teams[item.x - 1].team,

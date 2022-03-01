@@ -9,6 +9,7 @@ import {
 import { createBaseStore } from 'shared/lib/effector';
 import { always } from 'ramda';
 import { keyboard } from 'features/dom-events';
+import { isCellPositionsEq } from '../lib';
 
 import { addItem, removeItem } from '../model';
 import { CellPosition } from '../types';
@@ -35,12 +36,13 @@ sample({
   target: $index,
 });
 
-keyboard.$ctrlKeyEnabled.watch(console.log);
 sample({
   clock: $droppedValue,
   source: keyboard.$ctrlKeyEnabled,
   filter: (isCtrlEnabled, value) =>
-    !isCtrlEnabled && value.type === CELL_ENTITY,
+    !isCtrlEnabled &&
+    value.type === CELL_ENTITY &&
+    !isCellPositionsEq(value.dragParams, value.dropParams),
   fn: (_, params: any) => {
     const { dragParams, value } = params as DroppedValueType;
     return {
@@ -54,6 +56,7 @@ sample({
 
 sample({
   clock: $droppedValue,
+  filter: value => !isCellPositionsEq(value.dragParams, value.dropParams),
   fn: (params: any) => {
     const { dropParams, value } = params as DroppedValueType;
 

@@ -37,7 +37,6 @@ export const CellDnD: FC<CellPosition> = cellPosition => {
     <BaseCell
       row={cellPosition.y}
       className={cn(isActiveCell && 'bg-abdt-mint100')}
-      onClick={() => console.log('click')}
       onDragOver={isValueCanDrop(possibleDropEntities, () =>
         setActiveCell(cellPosition)
       )}

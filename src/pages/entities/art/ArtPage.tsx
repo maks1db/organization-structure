@@ -5,6 +5,7 @@ import { Header } from 'widgets/header';
 import { Employees, Positions, Teams } from './ui/art-structure';
 import { BaseCell, DEFAULT_CELL_WIDTH } from './ui/cell';
 import { RightMenu, EmployeeInfo } from './ui/right-menu';
+import { SaveButton } from './ui/save-button';
 import './model';
 
 export const Page: FC = () => {
@@ -26,6 +27,7 @@ export const Page: FC = () => {
           <Employees />
         </div>
       </div>
+      <SaveButton />
     </>
   );
 };

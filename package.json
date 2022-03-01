@@ -24,6 +24,7 @@
     "@abdt/fonts": "~0.0.3",
     "@abdt/icons": "~0.0.41",
     "@abdt/ornament": "~0.2.25",
+    "@material-ui/icons": "~4.11.2",
     "atomic-router": "~0.5.0-dev.1",
     "atomic-router-react": "~0.4.3",
     "body-parser": "~1.19.2",
