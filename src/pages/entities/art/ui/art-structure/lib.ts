@@ -1,4 +1,4 @@
-import { insert, path, range, remove } from 'ramda';
+import { insert, range, remove } from 'ramda';
 import { ArtType } from 'shared/types/api';
 
 import { CellType } from '../cell';
