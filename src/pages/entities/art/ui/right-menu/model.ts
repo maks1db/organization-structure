@@ -1,16 +1,17 @@
-import { createEvent, createStore } from 'effector';
-import { createBaseStore } from 'shared/lib/effector';
+import { createEvent, createStore, sample } from 'effector';
+import { equals } from 'ramda';
 
-interface ArtEmployee {
-  name: string;
-  id: string;
-}
+import { fetchEmployees } from './components/employees';
 
 export const setMenuVisibility = createEvent();
 export const toggleMenuVisibility = createEvent();
 
-export const [$employees, setEmployees] = createBaseStore<ArtEmployee[]>([]);
-
 export const $isOpened = createStore(false)
   .on(setMenuVisibility, (_, payload) => payload)
   .on(toggleMenuVisibility, state => !state);
+
+sample({
+  clock: $isOpened,
+  filter: equals(true),
+  target: fetchEmployees,
+});

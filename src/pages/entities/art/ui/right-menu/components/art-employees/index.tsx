@@ -9,16 +9,18 @@ import {
   TableBody,
 } from '@abdt/ornament';
 
+import cn from 'classnames';
 import { useStore } from 'effector-react';
 import { valueDragged } from 'features/drag-n-drop';
 import { makeEntityPreview } from 'shared/lib/entities';
 import { $list } from './model';
+import { toggleMenuVisibility } from '../../model';
 import { ART_EMPLOYEE } from '../../../../constants';
 
 export const ArtEmployees: FC = () => {
   const list = useStore($list);
   return (
-    <TableContainer component={Paper} className="h-1/2">
+    <TableContainer component={Paper} style={{ height: '40%' }}>
       <Table>
         <TableHead>
           <TableRow>
@@ -51,5 +53,25 @@ export const ArtEmployees: FC = () => {
         </TableBody>
       </Table>
     </TableContainer>
+  );
+};
+
+export const EmployeeInfo: FC<{ className?: string }> = ({ className }) => {
+  const list = useStore($list);
+  return (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    <>
+      {list.length > 0 && (
+        <div
+          className={cn('cursor-pointer', className)}
+          onClick={() => toggleMenuVisibility()}
+          onKeyUp={() => toggleMenuVisibility()}
+          role="button"
+          tabIndex={0}
+        >
+          {`Нераспределенные сотрудники: ${list.length}`}
+        </div>
+      )}
+    </>
   );
 };

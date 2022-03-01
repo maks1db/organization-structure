@@ -12,7 +12,10 @@ import {
   setArtStructure,
   resetArtStructure,
   artModified,
+  $employees,
 } from './ui/art-structure';
+import { $cells } from './ui/cell';
+import { setFilterIds } from './ui/right-menu';
 
 const ERROR_LOAD_MESSAGE =
   'Не удалось загрузить арт. Проверьте правильность ссылки';
@@ -56,8 +59,6 @@ sample({
   target: $isModify,
 });
 
-combine([$art, $isModify]).watch(console.log);
-
 sample({
   clock: combine([$art, $isModify]),
   fn: ([art, isModify]) => makeTitle(art?.name || '', isModify),
@@ -76,4 +77,14 @@ sample({
   clock: $art,
   filter: isNil,
   target: resetArtStructure,
+});
+
+sample({
+  clock: $cells,
+  source: $employees,
+  fn: (employees, cells) => [
+    ...cells.map(x => x.entities.map(e => e.id)).flat(),
+    ...employees.map(x => x.employee?._id || ''),
+  ],
+  target: setFilterIds,
 });

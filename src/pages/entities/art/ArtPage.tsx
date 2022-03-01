@@ -4,7 +4,7 @@ import { EntityEditor } from 'widgets/entity-editor';
 import { Header } from 'widgets/header';
 import { Employees, Positions, Teams } from './ui/art-structure';
 import { BaseCell, DEFAULT_CELL_WIDTH } from './ui/cell';
-import { RightMenu } from './ui/right-menu';
+import { RightMenu, EmployeeInfo } from './ui/right-menu';
 import './model';
 
 export const Page: FC = () => {
@@ -12,6 +12,7 @@ export const Page: FC = () => {
     <>
       <EntityEditor />
       <Header />
+      <EmployeeInfo className="fixed z-20 top-4 right-4 text-white" />
       <div className="w-full relative top-14">
         <RightMenu />
         <div className="absolute z-10">
