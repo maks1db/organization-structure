@@ -4,7 +4,7 @@ import {
   setContextMenu,
 } from 'features/select-from-context-menu';
 
-import { openEntityEditor } from '../../entity-editor';
+import { openEntityEditor } from 'widgets/entity-editor';
 import {
   getContextMenuArtPositions,
   getContextMenuEmployees,

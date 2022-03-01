@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { ArrowLeft } from '@abdt/icons';
 import { useStore } from 'effector-react';
-import { goBack, $appHeader } from './model';
+import { goBack, $title } from './model';
 
 export const Header: FC = () => {
-  const header = useStore($appHeader);
+  const title = useStore($title);
 
   return (
     <div className="bg-abdt-mint400 fixed h-14 top-0 left-0 right-0 z-20 shadow-xl py-2 px-20 flex items-center">
@@ -15,7 +15,7 @@ export const Header: FC = () => {
       >
         <ArrowLeft color="#fff" />
       </button>
-      <div className="text-white font-bold text-3xl">{header}</div>
+      <div className="text-white font-bold text-3xl">{title}</div>
     </div>
   );
 };

@@ -17,18 +17,21 @@ import {
   setActiveElement,
   $activeElement,
   $filterResult,
-  $entityTitle,
 } from './model';
 
+interface TableProps {
+  className: string;
+  title?: string;
+}
+
 const $store = combine({
-  entityTitle: $entityTitle,
   isFetching: $isFetching,
   activeElement: $activeElement,
   items: $filterResult,
 });
 
-export const Table: FC<{ className: string }> = ({ className }) => {
-  const { activeElement, entityTitle, isFetching, items } = useStore($store);
+export const Table: FC<TableProps> = ({ className, title }) => {
+  const { activeElement, isFetching, items } = useStore($store);
 
   if (isFetching) {
     return <CircularProgress size={50} />;
@@ -39,7 +42,7 @@ export const Table: FC<{ className: string }> = ({ className }) => {
       <BaseTable>
         <TableHead>
           <TableRow>
-            <TableCell>{entityTitle}</TableCell>
+            <TableCell>{title || 'Наименование'}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

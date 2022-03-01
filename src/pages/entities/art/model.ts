@@ -1,14 +1,18 @@
-import { createEffect, createStore, sample } from 'effector';
+import { createEffect, createStore, sample, combine } from 'effector';
 import { entities } from 'features/routing';
 import { showAppMessage } from 'features/show-message';
-import { always, isNil, pipe } from 'ramda';
+import { always, isNil, pipe, T } from 'ramda';
 import { getEntityArt } from 'shared/api/entities';
 import { getResultFromResponse } from 'shared/lib/entities';
 import { ArtType } from 'shared/types/api';
 
+import { setHeader, makeTitle } from 'widgets/header';
 import { prepareArtPositionsRawArtEmployees } from './lib';
-import { setHeader } from './ui/header';
-import { setArtStructure, resetArtStructure } from './ui/art-structure';
+import {
+  setArtStructure,
+  resetArtStructure,
+  artModified,
+} from './ui/art-structure';
 
 const ERROR_LOAD_MESSAGE =
   'Не удалось загрузить арт. Проверьте правильность ссылки';
@@ -22,6 +26,8 @@ const $art = createStore<ArtType | null>(null).on(
   (_, payload) =>
     pipe(getResultFromResponse, prepareArtPositionsRawArtEmployees)(payload)
 );
+
+export const $isModify = createStore(false);
 
 sample({
   clock: entities.art.$isOpened,
@@ -45,8 +51,16 @@ sample({
 });
 
 sample({
-  clock: $art,
-  fn: art => art?.name || '',
+  clock: artModified,
+  fn: T,
+  target: $isModify,
+});
+
+combine([$art, $isModify]).watch(console.log);
+
+sample({
+  clock: combine([$art, $isModify]),
+  fn: ([art, isModify]) => makeTitle(art?.name || '', isModify),
   target: setHeader,
 });
 

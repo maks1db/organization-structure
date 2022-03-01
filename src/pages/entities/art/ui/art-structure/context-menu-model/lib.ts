@@ -1,6 +1,6 @@
 import { ArtPositionType, BaseTeamType } from 'shared/types/api';
 import { MenuItemType } from 'features/select-from-context-menu';
-import { EditorParams, openEntityEditor } from '../../entity-editor';
+import { EditorParams, openEntityEditor } from 'widgets/entity-editor';
 import { ActionType, ExcludeIds } from './types';
 import {
   removeColumn,

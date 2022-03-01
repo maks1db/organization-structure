@@ -1,5 +1,5 @@
 import { combine, createEvent, sample } from 'effector';
-import { omit } from 'ramda';
+import { omit, T } from 'ramda';
 import {
   ArtPositionType,
   ArtType,
@@ -9,7 +9,6 @@ import {
 import { createResetDomain } from 'shared/lib/effector';
 
 import { pushCells, addItem, removeItem } from '../cell';
-import { setIsArtModified } from '../header';
 import { buildsEmployeeCells, getRange } from './lib';
 
 type RowIdType = { _id: string };
@@ -33,6 +32,7 @@ export const setEmployeePositionTeam = createEvent<{
 }>();
 export const removeEmployeePositionTeam = createEvent<string>();
 export const addEmployee = createEvent<AddEmployeeType>();
+export const artModified = createEvent();
 
 export const $positions = domain
   .createStore<ArtType['positions']>([])
@@ -99,7 +99,21 @@ sample({
   source: $source,
   fn: ([employees, positions, teams]) =>
     buildsEmployeeCells({ employees, positions, teams }),
-  target: [pushCells, setIsArtModified],
+  target: pushCells,
+});
+
+sample({
+  clock: [
+    removeRow,
+    removeColumn,
+    addColumn,
+    addRow,
+    addEmployee,
+    addItem,
+    removeItem,
+  ],
+  fn: T,
+  target: artModified,
 });
 
 sample({

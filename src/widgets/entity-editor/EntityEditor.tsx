@@ -86,7 +86,7 @@ export const EntityEditor: FC = () => {
         <Grid container spacing={3} className="mt-1">
           <Grid item xs={9}>
             <FilterText />
-            <Table className="h-56 mt-2" />
+            <Table className="h-56 mt-2" title={title} />
           </Grid>
           <Grid item xs={3}>
             <Color />

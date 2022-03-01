@@ -1,10 +1,10 @@
 import { FC } from 'react';
 
+import { EntityEditor } from 'widgets/entity-editor';
+import { Header } from 'widgets/header';
 import { Employees, Positions, Teams } from './ui/art-structure';
 import { BaseCell, DEFAULT_CELL_WIDTH } from './ui/cell';
-import { Header } from './ui/header';
 import { RightMenu } from './ui/right-menu';
-import { EntityEditor } from './ui/entity-editor';
 import './model';
 
 export const Page: FC = () => {

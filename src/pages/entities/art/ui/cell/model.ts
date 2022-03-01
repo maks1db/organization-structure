@@ -50,6 +50,3 @@ export const $cells = domain
   );
 
 export const $cellHeights = $cells.map(calculateCellsHeights);
-
-
-
