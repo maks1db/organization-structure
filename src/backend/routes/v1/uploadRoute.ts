@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import * as uploadController from '../../controllers/uploadController';
+import * as uploadController from '../../controllers/upload';
 
 export const uploadRouter = express.Router();
 

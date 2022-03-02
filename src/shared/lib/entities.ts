@@ -1,4 +1,4 @@
-import { isNil, path, take } from 'ramda';
+import { isNil, take } from 'ramda';
 import { SelectItem } from '../types/entities-api';
 
 const makeSelectItemEnding = (item: Partial<SelectItem>) => {
@@ -19,6 +19,3 @@ export const makeEntityPreview = (item: Partial<SelectItem>) => {
 
   return ending ? `${name} (${ending})` : name;
 };
-
-export const getResultFromResponse = (data: any) =>
-  path(['data', 'result'], data) as any;

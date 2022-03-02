@@ -3,9 +3,10 @@ import {
   getArtPositions,
   getEmployees,
   getTeams,
-} from 'backend/controllers/entitiesController/selectEntities';
+} from 'backend/controllers/entities/selectEntities';
 
-import { art } from 'backend/controllers/entitiesController/getEntities';
+import { art } from 'backend/controllers/entities/getEntities';
+import * as save from 'backend/controllers/entities/saveEntities';
 
 export const entitiesRouter = express.Router();
 
@@ -13,3 +14,4 @@ entitiesRouter.get('/select/artPositions', getArtPositions);
 entitiesRouter.get('/select/employees', getEmployees);
 entitiesRouter.get('/select/teams', getTeams);
 entitiesRouter.get('/art', art);
+entitiesRouter.patch('/art', save.saveArt);

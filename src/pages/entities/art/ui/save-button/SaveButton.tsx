@@ -5,16 +5,22 @@ import { useStore } from 'effector-react';
 import { FC } from 'react';
 import cn from 'classnames';
 
-import { $isModify } from '../../model';
+import { $isModify, saveArt, $artIsPendingSave } from '../../model';
 import { $isOpened } from '../right-menu';
 
 const $store = combine({
   isModify: $isModify,
   isOpened: $isOpened,
+  isFetching: $artIsPendingSave,
 });
 
+const events = {
+  onClick: () => saveArt(),
+  onKeyUp: () => saveArt(),
+};
+
 export const SaveButton: FC = () => {
-  const { isModify, isOpened } = useStore($store);
+  const { isModify, isOpened, isFetching } = useStore($store);
   return (
     <>
       {isModify && (
@@ -25,8 +31,12 @@ export const SaveButton: FC = () => {
             'fixed z-50 bottom-8 right-8 bg-abdt-mint400 rounded-full p-5',
             'shadow cursor-pointer transform transition-all duration-500',
             isOpened && '-translate-x-64',
-            !isOpened && 'translate-x-0'
+            !isOpened && 'translate-x-0',
+            isFetching && 'opacity-50'
           )}
+          {...(isFetching && events)}
+          onClick={() => saveArt()}
+          onKeyUp={() => saveArt()}
         >
           <Save fontSize="large" className="font-2xl" htmlColor="#fff" />
         </div>

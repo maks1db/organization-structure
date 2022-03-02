@@ -1,5 +1,5 @@
 import express from 'express';
-import { searchEntities } from '../../controllers/searchController';
+import { searchEntities } from '../../controllers/search';
 
 export const searchRouter = express.Router();
 

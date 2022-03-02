@@ -1,3 +1,4 @@
+import { omit } from 'ramda';
 import { ArtType } from 'shared/types/api';
 
 export const prepareArtPositionsRawArtEmployees = (art: ArtType) => {
@@ -23,4 +24,26 @@ export const prepareArtPositionsRawArtEmployees = (art: ArtType) => {
   });
 
   return art;
+};
+
+interface PrepareParams {
+  art: ArtType;
+  employees: ArtType['employees'];
+  teams: ArtType['teams'];
+  positions: ArtType['positions'];
+}
+
+export const prepareArtBodyForSendBody = ({
+  art,
+  employees,
+  teams,
+  positions,
+}: PrepareParams) => {
+  return {
+    ...art,
+    isRaw: false,
+    employees,
+    teams,
+    positions,
+  };
 };

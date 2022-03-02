@@ -1,28 +1,38 @@
-import { createEffect, createStore, sample, combine } from 'effector';
+import {
+  createEffect,
+  createStore,
+  sample,
+  combine,
+  createEvent,
+} from 'effector';
 import { entities } from 'features/routing';
 import { showAppMessage } from 'features/show-message';
-import { always, isNil, pipe, T } from 'ramda';
-import { getEntityArt } from 'shared/api/entities';
-import { getResultFromResponse } from 'shared/lib/entities';
+import { always, F, identity, isNil, pipe, T } from 'ramda';
+import * as api from 'shared/api/entities';
+import { getResultFromResponse, getErrorFromResponse } from 'shared/lib/api';
 import { ArtType } from 'shared/types/api';
-
 import { setHeader, makeTitle } from 'widgets/header';
-import { prepareArtPositionsRawArtEmployees } from './lib';
+import { ERROR_LOAD_MESSAGE, OPEN_RAW_ART_MESSAGE } from './constants';
+
+import {
+  prepareArtPositionsRawArtEmployees,
+  prepareArtBodyForSendBody,
+} from './lib';
 import {
   setArtStructure,
   resetArtStructure,
   artModified,
   $employees,
+  $teams,
+  $positions,
 } from './ui/art-structure';
 import { $cells } from './ui/cell';
 import { setFilterIds } from './ui/right-menu';
 
-const ERROR_LOAD_MESSAGE =
-  'Не удалось загрузить арт. Проверьте правильность ссылки';
-const OPEN_RAW_ART_MESSAGE =
-  'Сотрудники были распределены автоматически по ролям. Проверьте правильность операции';
+const getEntityArtFx = createEffect(api.getEntityArt);
+const saveArtFx = createEffect(api.saveArt);
 
-const getEntityArtFx = createEffect(getEntityArt);
+export const saveArt = createEvent();
 
 const $art = createStore<ArtType | null>(null).on(
   getEntityArtFx.doneData,
@@ -31,6 +41,8 @@ const $art = createStore<ArtType | null>(null).on(
 );
 
 export const $isModify = createStore(false);
+
+export const $artIsPendingSave = saveArtFx.pending.map(identity);
 
 sample({
   clock: entities.art.$isOpened,
@@ -87,4 +99,31 @@ sample({
     ...employees.map(x => x.employee?._id || ''),
   ],
   target: setFilterIds,
+});
+
+sample({
+  clock: saveArt,
+  source: combine([$art, $employees, $positions, $teams]),
+  fn: ([art, employees, positions, teams]) =>
+    art
+      ? prepareArtBodyForSendBody({
+          art,
+          employees,
+          positions,
+          teams,
+        })
+      : {},
+  target: saveArtFx,
+});
+
+sample({
+  clock: saveArtFx.doneData,
+  fn: F,
+  target: $isModify,
+});
+
+sample({
+  clock: saveArtFx.failData,
+  fn: getErrorFromResponse,
+  target: showAppMessage('danger'),
 });

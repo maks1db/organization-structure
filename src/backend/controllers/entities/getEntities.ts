@@ -9,7 +9,12 @@ export const art: RequestHandler = async (req, res) => {
   const { id } = req.query;
   const result = await Art.findOne({ _id: id })
     .populate('owner')
-    .populate('positions')
+    .populate({
+      path: 'positions.position',
+      populate: {
+        path: 'positions',
+      },
+    })
     .populate('teams.team')
     .populate({
       path: 'employees.employee',
@@ -18,6 +23,7 @@ export const art: RequestHandler = async (req, res) => {
       },
     })
     .populate('employees.team')
+    .populate('employees.position')
     .lean();
 
   if (result?.positions?.length === 0) {

@@ -9,7 +9,7 @@ import { createBaseStore } from 'shared/lib/effector';
 import { EmployeeType } from 'shared/types/api';
 import { SelectItem } from 'shared/types/entities-api';
 import { getEmployees } from 'shared/api/entities';
-import { getResultFromResponse } from 'shared/lib/entities';
+import { getResultFromResponse } from 'shared/lib/api';
 
 export const fetchEmployees = createEvent();
 const getEmployeesFx = createEffect(getEmployees);
