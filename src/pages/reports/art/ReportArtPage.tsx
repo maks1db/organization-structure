@@ -21,26 +21,30 @@ export const Page: FC = () => {
   const teamsRange = range(0, data.teams.length);
 
   return (
-    <div className="w-full relative flex">
-      <div className="fixed top-8 right-8 z-10 flex">
-        <LinkButton link="https://yandex.ru" icon="Jira" className="mr-2" />
-        <LinkButton link="https://google.ru" icon="Confluence" />
-      </div>
+    <div className="w-full relative flex font-rubrik">
       <div>
-        <Cell name="Арт" itemsPosition="right" className="font-bold" />
+        <Cell
+          name="Арт"
+          itemsPosition="right"
+          className="font-bold bg-yellow-200"
+        />
         <Cell
           name="Product owner"
           itemsPosition="right"
-          className="font-bold"
+          className="font-bold bg-yellow-200"
         />
-        <Cell name="Team" itemsPosition="right" className="font-bold" />
+        <Cell
+          name="Team"
+          itemsPosition="right"
+          className="font-bold bg-yellow-200"
+        />
         {data.positions.map(x => (
           <Cell
             key={x.position._id}
             name={x.position.name}
             height={calcHeight(x.position)}
             itemsPosition="right"
-            className="font-bold"
+            className="font-bold bg-yellow-200"
           />
         ))}
       </div>
@@ -48,16 +52,25 @@ export const Page: FC = () => {
         <Cell
           name={data.name}
           width={data.teams.length}
-          className="font-rubrik font-bold"
-        />
+          className="font-rubrik font-bold bg-yellow-300"
+        >
+          <div className="absolute flex z-10 right-3">
+            <LinkButton link="https://yandex.ru" icon="Jira" className="mr-2" />
+            <LinkButton link="https://google.ru" icon="Confluence" />
+          </div>
+        </Cell>
         <Cell
           name="Скворцов Максим"
           width={data.teams.length}
-          className="font-rubrik"
+          className="font-rubrik bg-yellow-300"
         />
         <div className="flex">
           {data.teams.map(x => (
-            <Cell key={x._id} name={x.team.name} />
+            <Cell
+              key={x._id}
+              name={x.team.name}
+              className="bg-yellow-300 font-bold"
+            />
           ))}
         </div>
         {data.positions.map(x => (
@@ -67,6 +80,7 @@ export const Page: FC = () => {
                 key={`${x.position._id}-${y}`}
                 data={getCellData(x.position, data.teams[y].team)}
                 height={calcHeight(x.position)}
+                className="bg-yellow-100 shadow"
               />
             ))}
           </div>

@@ -31,6 +31,7 @@ export const Cell: FC<CellProps> = ({
   name,
   itemsPosition,
   className,
+  children,
 }) => {
   return (
     <div
@@ -39,7 +40,7 @@ export const Cell: FC<CellProps> = ({
         width: `${17 * width}rem`,
       }}
       className={cn(
-        'border flex flex-col  justify-center border-gray-100 rounded p-2',
+        'border flex flex-col  justify-center border-gray-100 rounded p-2 relative',
         itemsPosition === 'right' && 'text-right',
         !itemsPosition && 'items-center',
         className
@@ -55,6 +56,7 @@ export const Cell: FC<CellProps> = ({
           ))}
         </>
       )}
+      {children}
     </div>
   );
 };

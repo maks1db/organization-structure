@@ -5,8 +5,8 @@ export const Jira: FC = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 40.343 42"
-    width="48px"
-    height="48px"
+    width="24px"
+    height="24px"
   >
     <g data-name="Слой 2">
       <path
@@ -61,8 +61,8 @@ export const Confluence: FC = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 48 48"
-    width="48px"
-    height="48px"
+    width="24px"
+    height="24px"
   >
     <path
       fill="#2684ff"
