@@ -12,7 +12,6 @@ interface AddItemType extends CellPosition {
   index: number;
 }
 
-export const addCell = createEvent<CellType>();
 export const pushCells = createEvent<CellType[]>();
 export const removeItem = createEvent<CellPosition & { id?: string }>();
 
@@ -21,7 +20,6 @@ export const addItem = createEvent<AddItemType>();
 export const $cells = domain
   .createStore<CellType[]>([])
   .on(pushCells, (_, payload) => payload)
-  .on(addCell, (state, payload) => [...state, payload])
   .on(removeItem, (state, payload) =>
     state.map(item => {
       if (isCellPositionsEq(item, payload)) {
@@ -48,5 +46,7 @@ export const $cells = domain
       return item;
     })
   );
+
+$cells.watch(console.log);
 
 export const $cellHeights = $cells.map(calculateCellsHeights);

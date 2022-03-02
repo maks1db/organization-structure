@@ -1,3 +1,5 @@
+import { VacancyType } from './api';
+
 export type SelectItem = {
   id: string;
   name: string;
@@ -6,4 +8,5 @@ export type SelectItem = {
   // TODO: исправить
   data?: any;
   uid: string;
+  vacancy?: VacancyType;
 };

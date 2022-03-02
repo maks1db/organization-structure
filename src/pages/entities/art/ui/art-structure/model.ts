@@ -6,6 +6,7 @@ import {
   ArtType,
   BaseTeamType,
   EmployeeType,
+  VacancyType,
 } from 'shared/types/api';
 import { createResetDomain } from 'shared/lib/effector';
 
@@ -15,8 +16,9 @@ import { buildsEmployeeCells, getRange, moveItem } from './lib';
 type RowIdType = { _id: string };
 type AddEmployeeType = {
   position: ArtPositionType;
-  employee: EmployeeType;
+  employee?: EmployeeType;
   team: BaseTeamType;
+  vacancy?: VacancyType;
 } & RowIdType;
 
 export const { domain, reset: resetArtStructure } = createResetDomain();

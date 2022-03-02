@@ -1,9 +1,10 @@
-import { FC, Fragment } from 'react';
-import { Menu, MenuItem, Divider, Fade } from '@abdt/ornament';
+import { Divider, Fade, ListItemText, Menu, MenuItem } from '@abdt/ornament';
 import { combine } from 'effector';
 import { useStore } from 'effector-react';
-import { $anchor, $menu, $isOpened, setMenuOpened } from './model';
+import { FC } from 'react';
+
 import styles from './ContextMenu.module.scss';
+import { $anchor, $isOpened, $menu, setMenuOpened } from './model';
 
 const $store = combine({
   anchor: $anchor,
@@ -35,15 +36,16 @@ export const ContextMenu: FC = () => {
           <Divider key={ind} />
         ) : (
           <MenuItem
+            style={{ minWidth: '12rem' }}
             {...x.props}
             onClick={() => {
               x.action?.();
               handleClose();
             }}
-            className="w-52"
             key={x.name}
+            selected={false}
           >
-            {x.name}
+            <ListItemText>{x.name}</ListItemText>
           </MenuItem>
         )
       )}

@@ -66,14 +66,21 @@ const artScheme = new mongoose.Schema<ArtType>({
   teams: [
     { team: { type: mongoose.Types.ObjectId, ref: Team }, color: String, font },
   ],
+  cells: [
+    {
+      team: { type: mongoose.Types.ObjectId, ref: Team },
+      position: { type: mongoose.Types.ObjectId, ref: ArtPosition },
+      color: String,
+      font,
+    },
+  ],
   employees: [
     {
       employee: { type: mongoose.Types.ObjectId, ref: Employee },
       team: { type: mongoose.Types.ObjectId, ref: Team },
       position: { type: mongoose.Types.ObjectId, ref: ArtPosition },
-      color: String,
-      font,
       rate: String,
+      vacancy: String,
     },
   ],
   unassignedEmployees: [{ type: mongoose.Types.ObjectId, ref: Employee }],

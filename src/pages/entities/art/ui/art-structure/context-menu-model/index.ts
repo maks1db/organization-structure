@@ -4,7 +4,6 @@ import {
   setContextMenu,
 } from 'features/select-from-context-menu';
 
-import { openEntityEditor } from 'widgets/entity-editor';
 import {
   getContextMenuArtPositions,
   getContextMenuEmployees,
@@ -45,11 +44,15 @@ sample({
       positions[y - 1].position,
       teams[x - 1].team
     ),
-  target: openEntityEditor,
+  target: setContextMenu,
 });
 
 sample({
-  clock: [openContextMenuTeams, openContextMenuArtPositions],
+  clock: [
+    openContextMenuTeams,
+    openContextMenuArtPositions,
+    openContextMenuEmployees,
+  ],
   fn: ({ anchor }) => anchor,
   target: openContextMenu,
 });

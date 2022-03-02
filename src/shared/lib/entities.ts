@@ -14,6 +14,13 @@ const makeSelectItemEnding = (item: Partial<SelectItem>) => {
 };
 
 export const makeEntityPreview = (item: Partial<SelectItem>) => {
+  if (item.vacancy === 'outstaff') {
+    return 'Вакансия (А)';
+  }
+
+  if (item.vacancy === 'state') {
+    return 'Вакансия (Ш)';
+  }
   const ending = makeSelectItemEnding(item);
   const name = take(2, (item?.name || '').split(' ')).join(' ');
 

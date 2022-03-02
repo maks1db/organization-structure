@@ -70,8 +70,8 @@ export const getContextMenuEmployees = (
   anchor: HTMLElement | null,
   position: ArtPositionType,
   team: BaseTeamType
-): EditorParams => {
-  return {
+): MenuItemType[] => {
+  const entityEditorParams: EditorParams = {
     anchor,
     entity: 'employee',
     onSelectValue: ({ data }) => {
@@ -83,4 +83,32 @@ export const getContextMenuEmployees = (
       });
     },
   };
+
+  return [
+    {
+      name: 'Параметры',
+      action: () => openEntityEditor(entityEditorParams),
+    },
+    { divider: true },
+    {
+      name: 'Добавить вакансию (А)',
+      action: () =>
+        addEmployee({
+          _id: makeId(),
+          position,
+          team,
+          vacancy: 'outstaff',
+        }),
+    },
+    {
+      name: 'Добавить вакансию (Ш)',
+      action: () =>
+        addEmployee({
+          _id: makeId(),
+          position,
+          team,
+          vacancy: 'state',
+        }),
+    },
+  ];
 };

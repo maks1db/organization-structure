@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 export type EntityType = 'employee' | 'art' | 'team' | 'artPosition';
+export type VacancyType = 'outstaff' | 'state';
 
 export type PositionType = {
   _id: string;
@@ -65,6 +66,12 @@ export type ArtType = {
     font?: FontType;
   }[];
   teams: TeamType[];
+  cells: {
+    position: ArtPositionType;
+    team: TeamType;
+    color: string;
+    font: FontType;
+  };
   employees: {
     _id: string;
     employee?: EmployeeType;
@@ -73,7 +80,7 @@ export type ArtType = {
     color?: string;
     font?: FontType;
     rate?: string;
-    isVacancy?: boolean;
+    vacancy?: VacancyType;
   }[];
   unassignedEmployees: EmployeeType[];
 };

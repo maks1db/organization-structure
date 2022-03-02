@@ -9,6 +9,7 @@ type EntityProps = {
   isEntityFromStartCell?: boolean;
   id: string;
   onRemove: () => void;
+  className?: string;
 };
 
 export const Entity: FC<EntityProps> = ({
@@ -16,12 +17,18 @@ export const Entity: FC<EntityProps> = ({
   isEntityFromStartCell,
   id,
   onRemove,
+  className,
 }) => {
   const isMovedEntity =
     useStoreMap($value, state => state?.value?.id === id) &&
     isEntityFromStartCell;
 
   return (
-    <BaseEntity isMovedEntity={isMovedEntity} name={name} onRemove={onRemove} />
+    <BaseEntity
+      isMovedEntity={isMovedEntity}
+      name={name}
+      onRemove={onRemove}
+      className={className}
+    />
   );
 };

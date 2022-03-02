@@ -90,6 +90,7 @@ export const CellDnD: FC<CellPosition> = cellPosition => {
                 ...cellPosition,
               })
             }
+            className={cn(item.vacancy && 'text-red-600 font-bold')}
           />
         </div>
       ))}

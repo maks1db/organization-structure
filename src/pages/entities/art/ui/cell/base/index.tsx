@@ -19,12 +19,14 @@ type EntityProps = {
   name: string;
   isMovedEntity?: boolean;
   onRemove?: () => void;
+  className?: string;
 };
 
 export const BaseEntity: FC<EntityProps> = ({
   name,
   isMovedEntity,
   onRemove,
+  className,
 }) => {
   return (
     <div
@@ -32,7 +34,8 @@ export const BaseEntity: FC<EntityProps> = ({
         'flex items-center justify-center text-sm h-8 relative w-full text-center',
         !isMovedEntity && styles.entity,
         isMovedEntity &&
-          'shadow-inner border-dashed border-2 border-abdt-neon600 opacity-50 bg-abdt-mint100'
+          'shadow-inner border-dashed border-2 border-abdt-neon600 opacity-50 bg-abdt-mint100',
+        className
       )}
     >
       {onRemove && (
