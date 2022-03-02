@@ -26,17 +26,17 @@ export const Page: FC = () => {
         <Cell
           name="Арт"
           itemsPosition="right"
-          className="font-bold bg-yellow-200"
+          className="font-bold bg-yellow-100"
         />
         <Cell
           name="Product owner"
           itemsPosition="right"
-          className="font-bold bg-yellow-200"
+          className="font-bold bg-yellow-100"
         />
         <Cell
           name="Team"
           itemsPosition="right"
-          className="font-bold bg-yellow-200"
+          className="font-bold bg-yellow-100"
         />
         {data.positions.map(x => (
           <Cell
@@ -44,7 +44,7 @@ export const Page: FC = () => {
             name={x.position.name}
             height={calcHeight(x.position)}
             itemsPosition="right"
-            className="font-bold bg-yellow-200"
+            className="font-bold bg-yellow-400"
           />
         ))}
       </div>
@@ -69,7 +69,7 @@ export const Page: FC = () => {
             <Cell
               key={x._id}
               name={x.team.name}
-              className="bg-yellow-300 font-bold"
+              className="bg-yellow-400 font-bold"
             />
           ))}
         </div>
@@ -80,7 +80,7 @@ export const Page: FC = () => {
                 key={`${x.position._id}-${y}`}
                 data={getCellData(x.position, data.teams[y].team)}
                 height={calcHeight(x.position)}
-                className="bg-yellow-100 shadow"
+                className="bg-yellow-200"
               />
             ))}
           </div>

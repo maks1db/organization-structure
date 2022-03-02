@@ -31,7 +31,10 @@ export const prepareHelpers = (art: ArtType) => {
         .filter(
           x => x.position?._id === position._id && x.team?._id === team?._id
         )
-        .map(({ employee }) => ({ ...employee, entity: 'employee' } as Item));
+        .map(
+          ({ employee, vacancy }) =>
+            ({ ...employee, entity: 'employee', vacancy } as Item)
+        );
     },
   };
 };

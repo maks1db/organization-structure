@@ -1,6 +1,8 @@
-import { FC } from 'react';
+import { FC, Fragment } from 'react';
 import cn from 'classnames';
 import { makeEntityPreview } from 'shared/lib/entities';
+import { Link } from 'atomic-router-react';
+import { reports } from 'features/routing';
 import * as Icons from './Icons';
 import { CellProps, LinkButtonProps } from './types';
 
@@ -40,7 +42,7 @@ export const Cell: FC<CellProps> = ({
         width: `${17 * width}rem`,
       }}
       className={cn(
-        'border flex flex-col  justify-center border-gray-100 rounded p-2 relative',
+        'border flex flex-col  justify-center border-gray-100 rounded p-2 relative shadow',
         itemsPosition === 'right' && 'text-right',
         !itemsPosition && 'items-center',
         className
@@ -49,11 +51,27 @@ export const Cell: FC<CellProps> = ({
       {name && <div>{name}</div>}
       {data && data?.length > 0 && (
         <>
-          {data.map(x => (
-            <div key={x._id} className="my-1">
-              {makeEntityPreview(x)}
-            </div>
-          ))}
+          {data.map(x => {
+            const Component = x.vacancy ? Fragment : Link;
+
+            return (
+              <Component
+                key={x._id}
+                to={reports.employee}
+                params={{ id: x._id }}
+              >
+                <div
+                  className={cn(
+                    'my-1',
+                    x.vacancy && 'font-bold text-red-700',
+                    !x.vacancy && 'hover:text-blue-700'
+                  )}
+                >
+                  {makeEntityPreview(x)}
+                </div>
+              </Component>
+            );
+          })}
         </>
       )}
       {children}

@@ -1,4 +1,4 @@
-import { EntityType } from 'shared/types/api';
+import { EntityType, VacancyType } from 'shared/types/api';
 import * as Icons from './Icons';
 
 export interface LinkButtonProps {
@@ -12,6 +12,7 @@ export interface Item {
   _id: string;
   workType?: string;
   entity: EntityType;
+  vacancy?: VacancyType;
 }
 
 export interface CellProps {
