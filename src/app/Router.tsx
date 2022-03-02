@@ -1,6 +1,8 @@
 import { RouterProvider, Route } from 'atomic-router-react';
 
 import { ArtPage } from 'pages/entities/art';
+import { ReportArtPage } from 'pages/reports/art';
+
 import { SearchPage } from 'pages/search';
 import { UploadPage } from 'pages/upload';
 
@@ -11,5 +13,6 @@ export const Router = () => (
     <Route route={routing.search} view={SearchPage} />
     <Route route={routing.entities.art} view={ArtPage} />
     <Route route={routing.upload} view={UploadPage} />
+    <Route route={routing.reports.art} view={ReportArtPage} />
   </RouterProvider>
 );

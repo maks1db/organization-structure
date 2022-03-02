@@ -88,7 +88,7 @@ sample({
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   clock: $art,
-  filter: art => art !== null,
+  filter: art => art?._id !== undefined,
   target: setArtStructure,
 });
 

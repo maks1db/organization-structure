@@ -17,6 +17,9 @@ module.exports = {
       colors: {
         abdt: themeColors,
       },
+      fontFamily: {
+        rubrik: ['Rubrik New', 'sans-serif'],
+      },
     },
   },
   variants: {

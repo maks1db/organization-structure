@@ -12,11 +12,21 @@ export const entities: Record<EntityType, RouteInstance<{ id: string }>> = {
   artPosition: createRoute<{ id: string }>(),
 };
 
+export const reports: Record<EntityType, RouteInstance<{ id: string }>> = {
+  art: createRoute<{ id: string }>(),
+  employee: createRoute<{ id: string }>(),
+  team: createRoute<{ id: string }>(),
+  artPosition: createRoute<{ id: string }>(),
+};
+
 const routes = [
   { path: '/', route: search },
   { path: '/entities/art/:id', route: entities.art },
   { path: '/entities/team/:id', route: entities.team },
   { path: '/entities/employee/:id', route: entities.employee },
+  { path: '/reports/art/:id', route: reports.art },
+  { path: '/reports/team/:id', route: reports.team },
+  { path: '/reports/employee/:id', route: reports.employee },
   { path: '/upload', route: upload },
 ];
 
