@@ -26,17 +26,17 @@ export const Page: FC = () => {
         <Cell
           name="Арт"
           itemsPosition="right"
-          className="font-bold bg-yellow-100"
+          className="font-bold bg-yellow-300"
         />
         <Cell
           name="Product owner"
           itemsPosition="right"
-          className="font-bold bg-yellow-100"
+          className="font-bold bg-yellow-300"
         />
         <Cell
           name="Team"
           itemsPosition="right"
-          className="font-bold bg-yellow-100"
+          className="font-bold bg-yellow-300"
         />
         {data.positions.map(x => (
           <Cell

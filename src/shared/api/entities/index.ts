@@ -15,5 +15,8 @@ export const getTeams = () => axios.get(makeApiUrl('/entities/select/teams'));
 export const getEntityArt = (params: QueryParams) =>
   axios.get(makeApiUrl('/entities/art'), { params });
 
+export const getEntityEmployee = (params: QueryParams) =>
+  axios.get(makeApiUrl('/entities/employee'), { params });
+
 export const saveArt = (body: any) =>
   axios.patch(makeApiUrl('/entities/art'), body);

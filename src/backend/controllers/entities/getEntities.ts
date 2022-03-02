@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { RequestHandler } from 'express';
-import { Art, ArtPosition } from 'backend/models';
+import { Art, ArtPosition, Employee } from 'backend/models';
 import { omit } from 'ramda';
 
 const omitVersion = omit(['__v']);
@@ -32,6 +32,17 @@ export const art: RequestHandler = async (req, res) => {
       position: omitVersion(position),
     }));
   }
+
+  res.json({
+    result: omitVersion(result),
+  });
+};
+
+export const employee: RequestHandler = async (req, res) => {
+  const { id } = req.query;
+  const result = await Employee.findOne({ _id: id })
+    .populate('position')
+    .lean();
 
   res.json({
     result: omitVersion(result),
