@@ -1,4 +1,3 @@
-import { omit } from 'ramda';
 import { ArtType } from 'shared/types/api';
 
 export const prepareArtPositionsRawArtEmployees = (art: ArtType) => {
@@ -41,7 +40,6 @@ export const prepareArtBodyForSendBody = ({
 }: PrepareParams) => {
   return {
     ...art,
-    isRaw: false,
     employees,
     teams,
     positions,

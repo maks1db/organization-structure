@@ -7,7 +7,7 @@ import {
 } from 'effector';
 import { entities } from 'features/routing';
 import { showAppMessage } from 'features/show-message';
-import { always, F, identity, isNil, pipe, T } from 'ramda';
+import { always, equals, F, identity, isNil, pipe, T } from 'ramda';
 import * as api from 'shared/api/entities';
 import { getResultFromResponse, getErrorFromResponse } from 'shared/lib/api';
 import { ArtType } from 'shared/types/api';
@@ -50,6 +50,13 @@ sample({
   filter: (_, isOpened) => isOpened,
   fn: source => source,
   target: getEntityArtFx,
+});
+
+sample({
+  clock: entities.art.$isOpened,
+  filter: equals(false),
+  fn: always(null),
+  target: [$art, $isModify],
 });
 
 sample({

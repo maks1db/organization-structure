@@ -63,7 +63,7 @@ export const EmployeeInfo: FC<{ className?: string }> = ({ className }) => {
     <>
       {list.length > 0 && (
         <div
-          className={cn('cursor-pointer', className)}
+          className={cn('cursor-pointer font-bold', className)}
           onClick={() => toggleMenuVisibility()}
           onKeyUp={() => toggleMenuVisibility()}
           role="button"
