@@ -7,6 +7,8 @@ import { always } from 'ramda';
 import { getResultFromResponse } from 'shared/lib/api';
 
 const ERROR_MESSAGE = 'Не удалось загрузить данные арта. Попробуйте позднее';
+const INFO_RAW_MESSAGE =
+  'По арту необходимо выполнить ручное распределение сотрудников';
 
 const getEntityArtFx = createEffect(getEntityArt);
 
@@ -36,6 +38,13 @@ sample({
   filter: isOpened => isOpened === false,
   fn: always(null),
   target: $art,
+});
+
+sample({
+  clock: $art,
+  filter: art => art?.isRaw === true,
+  fn: always(INFO_RAW_MESSAGE),
+  target: showAppMessage('warning'),
 });
 
 sample({
