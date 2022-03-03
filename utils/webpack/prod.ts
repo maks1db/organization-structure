@@ -1,8 +1,10 @@
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { Configuration } from 'webpack';
-// import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
 import { useCss, useSass } from './utils';
+
+const shouldAnalyzeBundle = process.env.ANALYZE === 'true';
 
 export default {
   output: {
@@ -25,6 +27,6 @@ export default {
     new MiniCssExtractPlugin({
       filename: 'assets/css/[name].[contenthash].css',
     }),
-    // new BundleAnalyzerPlugin(),
-  ],
+    shouldAnalyzeBundle && new BundleAnalyzerPlugin(),
+  ].filter(Boolean),
 } as Configuration;

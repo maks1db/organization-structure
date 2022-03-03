@@ -7,6 +7,7 @@
     "eslint": "eslint --ext .ts,.tsx './src'",
     "start": "rimraf public/* && TS_NODE_PROJECT=\"webpack.tsconfig.json\" NODE_ENV=development webpack-dev-server --output-pathinfo --hot --host localhost --port 4001 --mode development",
     "build": "rimraf public/* && TS_NODE_PROJECT=\"webpack.tsconfig.json\" webpack --mode production",
+    "build:analyze": "rimraf public/* && TS_NODE_PROJECT=\"webpack.tsconfig.json\" ANALYZE=true webpack --mode production",
     "server": "ts-node ./src/backend/server.ts",
     "test": "jest",
     "typecheck": "tsc --project tsconfig.json",
