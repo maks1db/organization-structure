@@ -1,10 +1,12 @@
-import { FC, Fragment } from 'react';
+/* eslint-disable react/jsx-no-useless-fragment */
+import { FC } from 'react';
 import cn from 'classnames';
 import { makeEntityPreview } from 'shared/lib/entities';
 import { Link } from 'atomic-router-react';
 import { reports } from 'features/routing';
 import * as Icons from './Icons';
 import { CellProps, LinkButtonProps } from './types';
+import { Item } from '.';
 
 const LinkButtonTitles: Record<keyof typeof Icons, string> = {
   Confluence: 'kb.akbars.ru',
@@ -23,6 +25,18 @@ export const LinkButton: FC<LinkButtonProps> = ({ icon, link, className }) => {
     >
       <Icon />
     </a>
+  );
+};
+
+const CellLink: FC<Item> = ({ children, ...item }) => {
+  if (item.vacancy) {
+    return <>{children}</>;
+  }
+
+  return (
+    <Link to={reports.employee} params={{ id: item._id }}>
+      {children}
+    </Link>
   );
 };
 
@@ -52,14 +66,8 @@ export const Cell: FC<CellProps> = ({
       {data && data?.length > 0 && (
         <>
           {data.map(x => {
-            const Component = x.vacancy ? Fragment : Link;
-
             return (
-              <Component
-                key={x._id}
-                to={reports.employee}
-                params={{ id: x._id }}
-              >
+              <CellLink key={x._id} {...x}>
                 <div
                   className={cn(
                     'my-1',
@@ -69,7 +77,7 @@ export const Cell: FC<CellProps> = ({
                 >
                   {makeEntityPreview(x)}
                 </div>
-              </Component>
+              </CellLink>
             );
           })}
         </>

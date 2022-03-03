@@ -11,7 +11,12 @@ import {
 import { createResetDomain } from 'shared/lib/effector';
 
 import { pushCells, addItem, removeItem } from '../cell';
-import { buildsEmployeeCells, getRange, moveItem } from './lib';
+import {
+  buildsEmployeeCells,
+  getRange,
+  moveItem,
+  isItemHaveVacancy,
+} from './lib';
 
 type RowIdType = { _id: string };
 type AddEmployeeType = {
@@ -37,6 +42,7 @@ export const setEmployeePositionTeam = createEvent<{
 }>();
 export const removeEmployeePositionTeam = createEvent<string>();
 export const addEmployee = createEvent<AddEmployeeType>();
+export const removeEmployee = createEvent<string>();
 export const artModified = createEvent();
 
 export const $positions = domain
@@ -88,7 +94,8 @@ export const $employees = domain
       return x;
     })
   )
-  .on(addEmployee, (state, payload) => [...state, payload]);
+  .on(addEmployee, (state, payload) => [...state, payload])
+  .on(removeEmployee, (state, payload) => state.filter(x => x._id !== payload));
 
 export const $columnsRange = $teams.map(getRange);
 export const $rowsRange = $positions.map(getRange);
@@ -127,8 +134,18 @@ sample({
 
 sample({
   clock: removeItem,
-  fn: item => item.id || '',
+  source: $employees,
+  filter: (employees, { id }) => !isItemHaveVacancy(employees, id || ''),
+  fn: (_, item) => item.id || '',
   target: removeEmployeePositionTeam,
+});
+
+sample({
+  clock: removeItem,
+  source: $employees,
+  filter: (employees, { id }) => isItemHaveVacancy(employees, id || ''),
+  fn: (_, item) => item.id || '',
+  target: removeEmployee,
 });
 
 sample({

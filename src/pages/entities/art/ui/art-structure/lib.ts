@@ -59,3 +59,8 @@ export const moveItem = <T>(from: number, to: number, items: T[]) => {
 
   return data;
 };
+
+export const isItemHaveVacancy = (
+  employees: ArtType['employees'],
+  id: string
+) => employees.find(x => x._id === id)?.vacancy !== undefined;
