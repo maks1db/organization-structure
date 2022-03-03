@@ -5,8 +5,7 @@ import { makeEntityPreview } from 'shared/lib/entities';
 import { Link } from 'atomic-router-react';
 import { reports } from 'features/routing';
 import * as Icons from './Icons';
-import { CellProps, LinkButtonProps } from './types';
-import { Item } from '.';
+import { CellProps, LinkButtonProps, Item } from './types';
 
 const LinkButtonTitles: Record<keyof typeof Icons, string> = {
   Confluence: 'kb.akbars.ru',
